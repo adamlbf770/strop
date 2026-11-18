@@ -11,17 +11,18 @@ from typing import Any
 from strop.config.enums import ModelRole
 from strop.config.llm import ModelSpec
 from strop.data.models import Partition, Row
-from strop.errors import DataError
+from strop.errors import DataError, LLMError
 from strop.evaluation.budget import BudgetTracker
 from strop.evaluation.budgeted import BudgetedClient
 from strop.evaluation.examples import to_examples, with_scores
-from strop.evaluation.models import EvaluationRecord, NewEvaluation
+from strop.evaluation.models import EvaluationRecord, ExampleOutcome, NewEvaluation
 from strop.evaluation.parsing import load_output_schema
 from strop.evaluation.runner import Progress, PromptRunner
 from strop.llm.client import LLMClient
 from strop.llm.factory import build_client
 from strop.log import LOGGER_NAME
 from strop.metrics.suite import MetricSuite
+from strop.metrics.types import ErrorCode
 from strop.prompts.versions import PromptVersion
 from strop.services.metrics import build_suite, judge_model
 from strop.services.partitions import PartitionedData, load_partitions
@@ -113,6 +114,7 @@ class Evaluator:
             self.budget,
         )
         outcomes = await runner.run(version.template, selected, progress)
+        _require_some_answers(outcomes)
         examples = to_examples(selected, outcomes)
         await self.suite.prepare(examples)
         report = self.suite.evaluate(examples)
@@ -131,6 +133,16 @@ class Evaluator:
                 },
                 run_id=tag.run_id,
             )
+        )
+
+
+def _require_some_answers(outcomes: Sequence[ExampleOutcome]) -> None:
+    """An evaluation where every call failed measures nothing, so it is an error, not a score."""
+    if outcomes and all(o.error == ErrorCode.PROVIDER_ERROR for o in outcomes):
+        raise LLMError(
+            f"every model call failed ({len(outcomes)} of {len(outcomes)}); first error: "
+            f"{outcomes[0].detail}. Check the model name, the API key, the API base, and your "
+            "network connection."
         )
 
 

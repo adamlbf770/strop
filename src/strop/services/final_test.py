@@ -54,8 +54,8 @@ async def run_final_test(  # noqa: PLR0913
     ]
     if used and not allow_rerun:
         raise ConfigError(
-            f"the test partition was already used (evaluation {used[0].id}, "
-            f"v{used[0].prompt_number}). Testing again after changing the prompt biases the "
+            f"the test partition was already used (evaluation {used[-1].id}, "
+            f"v{used[-1].prompt_number}). Testing again after changing the prompt biases the "
             "result; pass --allow-rerun to continue anyway"
         )
     record = await evaluator.evaluate(version, Partition.TEST, RunTag("test"), progress=progress)

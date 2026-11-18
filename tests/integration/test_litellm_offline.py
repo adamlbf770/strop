@@ -32,12 +32,16 @@ def test_real_client_records_usage_and_serves_repeats_from_the_cache(
     assert "Calls: 20 (20 cached)" in again
 
 
-def test_unknown_providers_fail_without_crashing_the_run(run_cli: CliRunner, project: Path) -> None:
+def test_an_unknown_provider_is_reported_instead_of_scored_as_zero(
+    run_cli: CliRunner, project: Path
+) -> None:
     path = project / "strop.yaml"
     path.write_text(
         path.read_text("utf-8").replace("openai/model-a", "no-such-provider/x"), "utf-8"
     )
     assert run_cli("data", "split", "--dir", str(project))[0] == 0
-    code, out, _ = run_cli("baseline", "--dir", str(project))
-    assert code == 0
-    assert "provider_error 20" in out
+    code, out, err = run_cli("baseline", "--dir", str(project))
+    assert code == 1
+    assert "every model call failed (20 of 20)" in err
+    assert "Check the model name, the API key" in err
+    assert "macro_f1" not in out

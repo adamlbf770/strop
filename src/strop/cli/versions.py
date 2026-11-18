@@ -7,6 +7,7 @@ import typer
 
 from strop.cli.options import DirOption, JsonOption, emit_json
 from strop.errors import ConfigError
+from strop.formatting import shorten
 from strop.prompts.diff import diff_templates
 from strop.prompts.versions import PromptVersion
 from strop.reporting import ColorMode, make_console, render_diff
@@ -71,7 +72,7 @@ def history_command(
             if decision and decision.primary_delta is not None
             else "-"
         )
-        summary = version.change_summary[:SUMMARY_WIDTH]
+        summary = shorten(version.change_summary, SUMMARY_WIDTH)
         typer.echo(
             f"{marker} {version.ref:<5} {version.source:<10} parent {parent:<5} "
             f"{status:<9} {delta:<8} {summary}"

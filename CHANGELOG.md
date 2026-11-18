@@ -5,6 +5,20 @@ All notable changes to Strop are listed here. The format follows
 [Semantic Versioning](https://semver.org/). While Strop is in alpha, minor versions may change
 commands or the `strop.yaml` format.
 
+## [Unreleased]
+
+### Fixed
+
+- An evaluation in which every model call failed (wrong API key, API base, or model name) is now
+  an error with the first provider message. Before, it was stored and shown as a score of 0.
+- The test report no longer shows a meaningless noise estimate of 0.00 for a perfect score. It
+  shows a 95% Wilson interval for the score instead.
+- `strop compare` no longer cuts long model names, and the candidate table in the `optimize`
+  summary shows why a candidate was rejected or discarded.
+- A paused `optimize` run no longer says that no improvement was accepted while a candidate is
+  waiting for approval.
+- `strop history` shortens long summaries at a word boundary and marks the cut.
+
 ## [0.1.0] - 2026-11-18
 
 First version.

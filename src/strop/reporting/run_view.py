@@ -55,6 +55,8 @@ def render_run(console: Console, summary: RunSummary) -> None:
 
 
 def _render_final_diff(console: Console, summary: RunSummary) -> None:
+    if summary.pending is not None:
+        return
     if summary.final.number == summary.initial.number:
         console.print("No improvement was accepted; the best prompt is unchanged.", soft_wrap=True)
         return
@@ -73,7 +75,8 @@ def _candidate_table(candidates: list[CandidateRecord]) -> Table:
     for item in candidates:
         delta = "-" if item.primary_delta is None else f"{item.primary_delta:+.4f}"
         version = f"v{item.version_number}" if item.version_number else "-"
-        note = item.change_summary or item.reason
+        explained = item.status in {"invalid", "rejected"}
+        note = (item.reason or item.change_summary) if explained else item.change_summary
         table.add_row(str(item.turn), version, item.status, delta, shorten(note, 60))
     return table
 

@@ -32,7 +32,7 @@ def test_confirmed_test_reports_the_held_out_result(
     assert "Held-out test result" in out
     assert "v1 (initial)" in out
     assert "validation" in out
-    assert "standard error" in out
+    assert "95% Wilson interval" in out
     assert "Do not change the prompt based on this result" in out
 
 

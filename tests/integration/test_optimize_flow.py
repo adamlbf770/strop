@@ -57,6 +57,7 @@ def test_manual_approval_pauses_then_resumes(
     code, out, err = optimize(run_cli, ready, "--approval", "manual")
     assert code == 10
     assert "paused for approval" in out
+    assert "No improvement was accepted" not in out
     assert "v2 is waiting for 'strop approve' or 'strop reject'" in out
     assert "strop approve v2" in err
     assert history(run_cli, ready)[0].startswith("* v1")
