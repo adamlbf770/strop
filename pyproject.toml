@@ -13,7 +13,7 @@ license-files = ["LICENSE"]
 authors = [{ name = "baranylcn" }]
 keywords = ["llm", "prompt", "prompt-optimization", "evaluation", "cli"]
 classifiers = [
-  "Development Status :: 2 - Pre-Alpha",
+  "Development Status :: 3 - Alpha",
   "Environment :: Console",
   "Intended Audience :: Developers",
   "Operating System :: OS Independent",
@@ -36,6 +36,8 @@ strop = "strop.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/baranylcn/strop"
+Documentation = "https://github.com/baranylcn/strop/tree/main/docs"
+Changelog = "https://github.com/baranylcn/strop/blob/main/CHANGELOG.md"
 Issues = "https://github.com/baranylcn/strop/issues"
 
 [dependency-groups]
