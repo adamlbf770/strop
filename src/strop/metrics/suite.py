@@ -2,6 +2,7 @@
 
 from collections.abc import Mapping, Sequence
 from dataclasses import dataclass
+from typing import Any
 
 from strop.config.metrics import Bound, MetricsConfig
 from strop.metrics.registry import MetricContext, build_metric
@@ -20,6 +21,30 @@ class MetricReport:
     @property
     def primary_value(self) -> MetricValue:
         return self.values[self.primary]
+
+    def to_dict(self) -> dict[str, Any]:
+        return {
+            "primary": self.primary,
+            "values": {
+                name: {
+                    "value": m.value,
+                    "samples": m.samples,
+                    "subjective": m.subjective,
+                    "details": m.details,
+                }
+                for name, m in self.values.items()
+            },
+        }
+
+    @classmethod
+    def from_dict(cls, data: Mapping[str, Any]) -> "MetricReport":
+        values = {
+            name: MetricValue(
+                name, item["value"], item["samples"], item["subjective"], item["details"]
+            )
+            for name, item in data["values"].items()
+        }
+        return cls(data["primary"], values)
 
     def violations(self, bounds: Mapping[str, Bound]) -> list[str]:
         """Constraint violations as readable sentences; empty when all constraints hold."""
