@@ -1,12 +1,13 @@
 """Building the metric suite a project asks for."""
 
+from strop.config import StropConfig
 from strop.config.enums import ModelRole
 from strop.config.llm import ModelSpec
 from strop.errors import ConfigError
 from strop.llm.client import LLMClient
 from strop.metrics.judge import JudgeMetric
 from strop.metrics.python_metric import METRIC_NAME, PythonMetric
-from strop.metrics.registry import MetricContext
+from strop.metrics.registry import MetricContext, build_metric
 from strop.metrics.suite import MetricSuite
 from strop.metrics.types import Direction, Metric
 from strop.services.project import Project
@@ -39,10 +40,26 @@ def build_suite(project: Project, judge: JudgeAccess | None = None) -> MetricSui
             config.project.task_description,
             config.execution.max_concurrency,
         )
+    validate_metric_names(config)
     context = MetricContext(labels=config.output.labels, rules=config.metrics.rules)
     suite = MetricSuite.from_config(config.metrics, context, extra)
     _check_references(project, suite)
     return suite
+
+
+def validate_metric_names(config: StropConfig) -> None:
+    """Fail early, with the list of valid names, if a configured metric does not exist."""
+    metrics = config.metrics
+    context = MetricContext(labels=config.output.labels, rules=metrics.rules)
+    for name in (metrics.primary, *metrics.secondary, *metrics.constraints):
+        if name == METRIC_NAME:
+            if metrics.python is None:
+                raise ConfigError("metric 'custom' needs metrics.python (pass --metric-file)")
+        elif name.startswith("judge:"):
+            if name.removeprefix("judge:") not in metrics.judges:
+                raise ConfigError(f"metric '{name}' has no rubric; pass --rubric-file")
+        else:
+            build_metric(name, context)
 
 
 def judge_model(project: Project) -> ModelSpec | None:

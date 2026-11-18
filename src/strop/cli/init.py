@@ -10,6 +10,7 @@ from strop.cli.options import DirOption
 from strop.config import DatasetFormat, OutputType, StropConfig
 from strop.config.constraints import parse_constraints
 from strop.config.io import format_errors
+from strop.config.rules import load_rubrics, parse_rules
 from strop.errors import ConfigError
 from strop.services.scaffold import data_recipients, scaffold_project
 
@@ -38,6 +39,15 @@ def init_command(
     ] = None,
     constraint: Annotated[
         list[str] | None, Option(help="Metric limit such as 'valid_output_rate>=0.98'. Repeatable.")
+    ] = None,
+    rule: Annotated[
+        list[str] | None, Option(help="Output check such as 'short=max_words:120'. Repeatable.")
+    ] = None,
+    metric_file: Annotated[
+        Path | None, Option(help="Python file defining score(output, row); metric name 'custom'.")
+    ] = None,
+    rubric_file: Annotated[
+        Path | None, Option(help="YAML file of judge rubrics; each becomes metric 'judge:<name>'.")
     ] = None,
     optimizer_model: Annotated[str | None, Option(help="Model that proposes revisions.")] = None,
     analyzer_model: Annotated[str | None, Option(help="Model that summarizes failures.")] = None,
@@ -72,6 +82,9 @@ def init_command(
             "constraints": {
                 k: v.model_dump() for k, v in parse_constraints(constraint or []).items()
             },
+            "rules": {k: v.model_dump(mode="json") for k, v in parse_rules(rule or []).items()},
+            "python": {"file": str(metric_file)} if metric_file else None,
+            "judges": _rubrics(directory, rubric_file),
         },
         "split": {"seed": seed},
     }
@@ -105,3 +118,9 @@ def _validate(raw: dict[str, Any]) -> StropConfig:
         return StropConfig.model_validate(raw)
     except ValidationError as exc:
         raise ConfigError(f"invalid options:\n{format_errors(exc)}") from exc
+
+
+def _rubrics(directory: Path, file: Path | None) -> dict[str, Any]:
+    if file is None:
+        return {}
+    return {name: spec.model_dump() for name, spec in load_rubrics(directory / file).items()}

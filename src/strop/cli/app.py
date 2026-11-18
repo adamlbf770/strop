@@ -15,6 +15,7 @@ from strop.cli.prompts import prompt_app
 from strop.cli.status import status_command
 from strop.cli.versions import diff_command, history_command, rollback_command
 from strop.errors import ExitCode, StropError
+from strop.log import configure_logging
 
 app = typer.Typer(
     name="strop",
@@ -50,8 +51,11 @@ def _root(
         bool,
         typer.Option("--version", callback=_show_version, is_eager=True, help="Show the version."),
     ] = False,
+    verbose: Annotated[bool, typer.Option("--verbose", help="Show debug messages.")] = False,
+    quiet: Annotated[bool, typer.Option("--quiet", help="Show errors only.")] = False,
 ) -> None:
     """Improve LLM prompts by testing them against your own data."""
+    configure_logging(verbose=verbose, quiet=quiet)
 
 
 def main() -> None:
