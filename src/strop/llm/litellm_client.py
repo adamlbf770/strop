@@ -1,6 +1,7 @@
 """The LiteLLM-backed client. LiteLLM is imported lazily to keep CLI start-up fast."""
 
 import logging
+import os
 import time
 from types import ModuleType
 from typing import Any
@@ -19,9 +20,12 @@ _TRANSIENT_NAMES = (
 
 
 def _load_litellm() -> ModuleType:
+    # Use the price table bundled with LiteLLM instead of downloading one when it is imported.
+    os.environ.setdefault("LITELLM_LOCAL_MODEL_COST_MAP", "True")
     import litellm  # noqa: PLC0415 - deferred: importing litellm takes over a second
 
     litellm.suppress_debug_info = True
+    litellm.telemetry = False
     logging.getLogger("LiteLLM").setLevel(logging.ERROR)
     return litellm
 

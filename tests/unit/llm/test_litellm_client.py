@@ -1,3 +1,4 @@
+import os
 from types import ModuleType, SimpleNamespace
 from typing import Any
 
@@ -126,3 +127,12 @@ async def test_malformed_response_is_an_error(monkeypatch: pytest.MonkeyPatch) -
     install(monkeypatch, fake_litellm(SimpleNamespace(choices=[])))
     with pytest.raises(LLMError, match="without a message"):
         await LiteLLMClient().complete(request())
+
+
+def test_loading_litellm_disables_telemetry_and_remote_price_downloads(
+    monkeypatch: pytest.MonkeyPatch,
+) -> None:
+    monkeypatch.delenv("LITELLM_LOCAL_MODEL_COST_MAP", raising=False)
+    litellm = module._load_litellm()
+    assert os.environ["LITELLM_LOCAL_MODEL_COST_MAP"] == "True"
+    assert litellm.telemetry is False
