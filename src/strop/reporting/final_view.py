@@ -70,17 +70,22 @@ def render_comparison(console: Console, comparison: Comparison) -> None:
     title = f"{comparison.version.ref} on {comparison.partition.value}, same rows for every model"
     console.print(Text(title, style="bold"), soft_wrap=True)
     table = Table(box=None, pad_edge=False, header_style="bold")
-    primary = comparison.results[0][1].report.primary
+    done = [r.record for r in comparison.results if r.record is not None]
+    primary = done[0].report.primary
     for column in ("Model", primary, "Valid output rate", "Errors", "Cost", "Mean latency"):
         table.add_column(column, overflow="fold")
-    for name, record in comparison.results:
+    for result in comparison.results:
+        record = result.record
+        if record is None:
+            table.add_row(result.model, "failed", "-", "-", "-", "-")
+            continue
         validity = record.report.values.get("valid_output_rate")
         cost = "unavailable" if record.usage.cost_usd is None else f"${record.usage.cost_usd:.4f}"
         latency = (
             fmt(record.usage.mean_latency_s, 2) + "s" if record.usage.mean_latency_s else "n/a"
         )
         table.add_row(
-            name,
+            result.model,
             _value(record),
             fmt(validity.value if validity else None),
             f"{record.error_count}/{record.sample_count}",
@@ -88,6 +93,9 @@ def render_comparison(console: Console, comparison: Comparison) -> None:
             latency,
         )
     console.print(table)
+    for result in comparison.results:
+        if result.error:
+            console.print(f"{result.model}: {result.error}", soft_wrap=True, markup=False)
 
 
 def _value(record: EvaluationRecord) -> str:
@@ -112,6 +120,9 @@ def comparison_payload(comparison: Comparison) -> dict[str, Any]:
         "version": ref,
         "partition": comparison.partition.value,
         "models": [
-            {"model": name, **record_payload(record, ref)} for name, record in comparison.results
+            {"model": r.model, **record_payload(r.record, ref)}
+            if r.record is not None
+            else {"model": r.model, "error": r.error}
+            for r in comparison.results
         ],
     }

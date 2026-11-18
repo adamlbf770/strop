@@ -1,5 +1,6 @@
 """What happens when the model provider fails."""
 
+import json
 import sqlite3
 from pathlib import Path
 
@@ -76,3 +77,39 @@ def test_compare_does_not_truncate_long_model_names(
     )
     assert code == 0
     assert chr(0x2026) not in out
+
+
+def test_compare_keeps_working_models_when_one_model_fails(
+    run_cli: CliRunner, project: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    def route(request: LLMRequest) -> str:
+        if request.model == "provider/broken":
+            raise LLMError("no access to this model")
+        return "refund"
+
+    install(monkeypatch, MockLLMClient(route))
+    assert run_cli("data", "split", "--dir", str(project))[0] == 0
+    code, out, _ = run_cli(
+        "compare", "--dir", str(project), "--models", "provider/good,provider/broken"
+    )
+    assert code == 0
+    assert "provider/good" in out
+    assert "provider/broken" in out
+    assert "failed" in out
+    assert "no access to this model" in out
+    _, raw, _ = run_cli(
+        "compare", "--dir", str(project), "--models", "provider/good,provider/broken", "--json"
+    )
+    models = {m["model"]: m for m in json.loads(raw)["models"]}
+    assert "error" in models["provider/broken"]
+    assert models["provider/good"]["partition"] == "validation"
+
+
+def test_compare_fails_when_no_model_works(
+    run_cli: CliRunner, project: Path, monkeypatch: pytest.MonkeyPatch
+) -> None:
+    install(monkeypatch, MockLLMClient(always_down))
+    assert run_cli("data", "split", "--dir", str(project))[0] == 0
+    code, _, err = run_cli("compare", "--dir", str(project), "--models", "a/x,b/y")
+    assert code == 1
+    assert "no model could be evaluated" in err

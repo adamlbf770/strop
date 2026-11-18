@@ -141,8 +141,8 @@ def _require_some_answers(outcomes: Sequence[ExampleOutcome]) -> None:
     if outcomes and all(o.error == ErrorCode.PROVIDER_ERROR for o in outcomes):
         raise LLMError(
             f"every model call failed ({len(outcomes)} of {len(outcomes)}); first error: "
-            f"{outcomes[0].detail}. Check the model name, the API key, the API base, and your "
-            "network connection."
+            f"{(outcomes[0].detail or 'unknown').rstrip('.')}. Check the model name, the API key, "
+            "the API base, and your network connection."
         )
 
 

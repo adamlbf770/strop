@@ -4,7 +4,7 @@ import sqlite3
 from dataclasses import dataclass, replace
 
 from strop.data.models import Partition
-from strop.errors import ConfigError
+from strop.errors import ConfigError, LLMError
 from strop.evaluation.models import EvaluationRecord
 from strop.evaluation.runner import Progress
 from strop.prompts.versions import PromptVersion
@@ -16,10 +16,19 @@ from strop.storage.prompts import PromptRepository
 
 
 @dataclass(frozen=True)
+class ModelResult:
+    """One model's evaluation, or the reason it could not be evaluated."""
+
+    model: str
+    record: EvaluationRecord | None = None
+    error: str | None = None
+
+
+@dataclass(frozen=True)
 class Comparison:
     version: PromptVersion
     partition: Partition
-    results: list[tuple[str, EvaluationRecord]]
+    results: list[ModelResult]
 
 
 def parse_models(text: str) -> list[str]:
@@ -55,6 +64,12 @@ async def run_compare(  # noqa: PLR0913
     for name in models:
         evaluator = replace(base, target=base.target.model_copy(update={"model": name}))
         tag = RunTag("compare", {"sampled": sample is not None})
-        record = await evaluator.evaluate(version, partition, tag, rows=rows, progress=progress)
-        results.append((name, record))
+        try:
+            record = await evaluator.evaluate(version, partition, tag, rows=rows, progress=progress)
+        except LLMError as exc:
+            results.append(ModelResult(name, error=str(exc)))
+        else:
+            results.append(ModelResult(name, record))
+    if all(r.record is None for r in results):
+        raise LLMError(f"no model could be evaluated; first error: {results[0].error}")
     return Comparison(version, partition, results)

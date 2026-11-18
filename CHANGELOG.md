@@ -13,7 +13,8 @@ commands or the `strop.yaml` format.
   an error with the first provider message. Before, it was stored and shown as a score of 0.
 - The test report no longer shows a meaningless noise estimate of 0.00 for a perfect score. It
   shows a 95% Wilson interval for the score instead.
-- `strop compare` no longer cuts long model names, and the candidate table in the `optimize`
+- `strop compare` keeps the results of working models when one model fails, marks the failed
+  model, and no longer cuts long model names. The candidate table in the `optimize`
   summary shows why a candidate was rejected or discarded.
 - A paused `optimize` run no longer says that no improvement was accepted while a candidate is
   waiting for approval.
