@@ -4,7 +4,7 @@ from pathlib import Path
 import pytest
 
 from strop.cli import main
-from tests.helpers import CliRunner
+from tests.helpers import CliRunner, write_dataset
 
 
 @pytest.fixture
@@ -50,3 +50,11 @@ def init_args(project_dir: Path) -> list[str]:
         "--target-model", "openai/model-a",
         "--optimizer-model", "anthropic/model-b",
     ]  # fmt: skip
+
+
+@pytest.fixture
+def project(run_cli: CliRunner, init_args: list[str], project_dir: Path) -> Path:
+    """An initialized project with a 100-row dataset."""
+    write_dataset(project_dir)
+    assert run_cli(*init_args)[0] == 0
+    return project_dir

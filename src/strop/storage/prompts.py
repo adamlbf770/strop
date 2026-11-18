@@ -56,6 +56,14 @@ class PromptRepository:
         rows = self._conn.execute(f"SELECT {_COLUMNS} FROM prompt_versions ORDER BY number")
         return [_to_version(row) for row in rows.fetchall()]
 
+    def find_by_hash(self, content_hash: str) -> PromptVersion | None:
+        """The earliest version whose content matches ``content_hash``, if any."""
+        row = self._conn.execute(
+            f"SELECT {_COLUMNS} FROM prompt_versions WHERE content_hash = ? ORDER BY number",
+            (content_hash,),
+        ).fetchone()
+        return _to_version(row) if row else None
+
     def first(self) -> PromptVersion | None:
         rows = self.list()
         return rows[0] if rows else None

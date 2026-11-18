@@ -1,27 +1,10 @@
 import json
 from pathlib import Path
 
-import pytest
-
 from strop.config import load_config
 from strop.services.data import effective_split_config
 from strop.services.project import open_project
-from tests.helpers import CliRunner
-
-
-def write_dataset(project_dir: Path, rows: int = 100, *, bad_row: bool = False) -> None:
-    lines = ["message,category"]
-    for i in range(rows):
-        label = "refund" if i % 2 else "billing"
-        lines.append(f"{'' if bad_row and i == 1 else f'message {i}'},{label}")
-    (project_dir / "data.csv").write_text("\n".join(lines) + "\n", encoding="utf-8")
-
-
-@pytest.fixture
-def project(run_cli: CliRunner, init_args: list[str], project_dir: Path) -> Path:
-    write_dataset(project_dir)
-    assert run_cli(*init_args)[0] == 0
-    return project_dir
+from tests.helpers import CliRunner, write_dataset
 
 
 def test_check_reports_a_clean_dataset(run_cli: CliRunner, project: Path) -> None:
