@@ -24,6 +24,7 @@ class ErrorCode(StrEnum):
     WRONG_LABEL = "wrong_label"
     WRONG_VALUE = "wrong_value"
     MISSING_FIELD = "missing_field"
+    RULE_VIOLATION = "rule_violation"
     METRIC_ERROR = "metric_error"
 
 
