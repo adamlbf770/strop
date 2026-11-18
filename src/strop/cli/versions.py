@@ -13,6 +13,7 @@ from strop.reporting import ColorMode, make_console, render_diff
 from strop.services.project import open_project
 from strop.services.prompts import resolve_version
 from strop.storage.prompts import PromptRepository
+from strop.storage.runs import CandidateRecord, RunRepository
 
 SUMMARY_WIDTH = 60
 
@@ -46,14 +47,16 @@ def history_command(
     as_json: JsonOption = False,
     directory: DirOption = Path(),
 ) -> None:
-    """List every prompt version, oldest first. The best prompt is marked with *."""
+    """List every prompt version with the decision made about it. The best is marked with *."""
     project = open_project(directory)
     with project.database() as conn:
         repo = PromptRepository(conn)
+        runs = RunRepository(conn)
         versions = repo.list()
         best = repo.best_number()
+        decisions = {v.number: runs.for_version(v.number) for v in versions}
     if as_json:
-        emit_json({"best": best, "versions": [_row(v) for v in versions]})
+        emit_json({"best": best, "versions": [_row(v, decisions[v.number]) for v in versions]})
         return
     if not versions:
         typer.echo("No prompt versions yet. The prompt file is registered as v1 on the first run.")
@@ -61,8 +64,18 @@ def history_command(
     for version in versions:
         marker = "*" if version.number == best else " "
         parent = f"v{version.parent_number}" if version.parent_number else "-"
+        decision = decisions[version.number]
+        status = decision.status if decision else "-"
+        delta = (
+            f"{decision.primary_delta:+.4f}"
+            if decision and decision.primary_delta is not None
+            else "-"
+        )
         summary = version.change_summary[:SUMMARY_WIDTH]
-        typer.echo(f"{marker} {version.ref:<5} {version.source:<10} parent {parent:<5} {summary}")
+        typer.echo(
+            f"{marker} {version.ref:<5} {version.source:<10} parent {parent:<5} "
+            f"{status:<9} {delta:<8} {summary}"
+        )
 
 
 def rollback_command(
@@ -96,8 +109,11 @@ def _pick_pair(
     return repo.get(selected.parent_number), selected
 
 
-def _row(version: PromptVersion) -> dict[str, object]:
+def _row(version: PromptVersion, decision: CandidateRecord | None) -> dict[str, object]:
     return {
+        "status": decision.status if decision else None,
+        "primary_delta": decision.primary_delta if decision else None,
+        "decision_reason": decision.reason if decision else None,
         "version": version.number,
         "parent": version.parent_number,
         "source": version.source,

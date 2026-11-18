@@ -6,9 +6,11 @@ from typing import Annotated
 import typer
 
 from strop import __version__
+from strop.cli.analyze import analyze_command
 from strop.cli.data import data_app
 from strop.cli.evaluate import baseline_command, eval_command
 from strop.cli.init import init_command
+from strop.cli.optimize import approve_command, optimize_command, reject_command
 from strop.cli.prompts import prompt_app
 from strop.cli.status import status_command
 from strop.cli.versions import diff_command, history_command, rollback_command
@@ -30,6 +32,10 @@ app.command("rollback")(rollback_command)
 app.command("baseline")(baseline_command)
 app.command("eval")(eval_command)
 app.command("status")(status_command)
+app.command("analyze")(analyze_command)
+app.command("optimize")(optimize_command)
+app.command("approve")(approve_command)
+app.command("reject")(reject_command)
 
 
 def _show_version(value: bool) -> None:
