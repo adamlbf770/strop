@@ -6,7 +6,7 @@ from pydantic import ValidationError
 
 from strop.config import DatasetFormat, ModelRole, StropConfig
 from strop.config.dataset import DatasetConfig
-from strop.config.metrics import Bound
+from strop.config.metrics import Bound, RuleSpec
 from strop.config.output import OutputConfig
 from strop.config.split import SplitConfig
 from strop.errors import ConfigError
@@ -113,3 +113,31 @@ def test_missing_role_names_the_flag(config_data: dict[str, Any]) -> None:
     models = StropConfig.model_validate(config_data).models
     with pytest.raises(ConfigError, match="--optimizer-model"):
         models.resolve(ModelRole.OPTIMIZER)
+
+
+@pytest.mark.parametrize(
+    "kwargs",
+    [
+        {"type": "max_words", "value": "ten"},
+        {"type": "max_chars", "value": -1},
+        {"type": "matches", "value": 5},
+        {"type": "matches", "value": "(unclosed"},
+        {"type": "contains_all", "value": []},
+        {"type": "contains_none", "value": "text"},
+    ],
+)
+def test_invalid_rule_specs(kwargs: dict[str, Any]) -> None:
+    with pytest.raises(ValidationError):
+        RuleSpec.model_validate(kwargs)
+
+
+def test_valid_rule_specs() -> None:
+    assert RuleSpec(type="max_words", value=120).value == 120
+    assert RuleSpec(type="not_matches", value=r"(?i)guarantee").value == r"(?i)guarantee"
+    assert RuleSpec(type="contains_all", value=["a", "b"]).value == ["a", "b"]
+
+
+def test_match_mode_is_only_for_label_outputs() -> None:
+    assert OutputConfig(type="label", labels=("a", "b"), match="contains").match == "contains"
+    with pytest.raises(ValidationError, match="only valid for type 'label'"):
+        OutputConfig(type="text", match="contains")

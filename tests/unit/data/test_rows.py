@@ -77,3 +77,20 @@ def test_row_hash_depends_on_content() -> None:
     assert base == row_hash({"a": "1"}, "x")
     assert base != row_hash({"a": "2"}, "x")
     assert base != row_hash({"a": "1"}, "y")
+
+
+def test_expected_json_must_be_valid(config_data: dict[str, Any]) -> None:
+    config_data["output"] = {"type": "json"}
+    config = make_config(config_data)
+    rows, issues = build_rows(
+        [
+            record(1, message="a", category='{"x": 1}'),
+            record(2, message="b", category="{not json"),
+        ],
+        config.dataset,
+        config.output,
+    )
+    assert [r.number for r in rows] == [1]
+    assert [str(i) for i in issues] == [
+        "row 2: expected column 'category' does not contain valid JSON"
+    ]

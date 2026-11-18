@@ -24,6 +24,7 @@ classifiers = [
   "Typing :: Typed",
 ]
 dependencies = [
+    "jsonschema>=4.23",
     "pydantic>=2.9",
     "ruamel-yaml>=0.18",
     "typer>=0.15",
@@ -42,6 +43,7 @@ dev = [
   "pytest>=8.3",
   "pytest-asyncio>=0.24",
   "ruff>=0.8",
+  "types-jsonschema>=4.26.0.20261006",
 ]
 
 [tool.hatch.version]

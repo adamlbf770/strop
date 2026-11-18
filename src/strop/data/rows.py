@@ -74,7 +74,17 @@ def _check_record(record: RawRecord, dataset: DatasetConfig, output: OutputConfi
             problems.append(f"expected column '{expected_column}' is empty")
         elif output.type is OutputType.LABEL and expected not in output.labels:
             problems.append(f"expected value '{expected}' is not one of the output labels")
+        elif output.type is OutputType.JSON and not _is_json(expected):
+            problems.append(f"expected column '{expected_column}' does not contain valid JSON")
     return problems
+
+
+def _is_json(text: str) -> bool:
+    try:
+        json.loads(text)
+    except ValueError:
+        return False
+    return True
 
 
 def _make_row(record: RawRecord, row_id: str, dataset: DatasetConfig) -> Row:
