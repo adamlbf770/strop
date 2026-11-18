@@ -23,7 +23,10 @@ classifiers = [
   "Programming Language :: Python :: 3.13",
   "Typing :: Typed",
 ]
-dependencies = []
+dependencies = [
+    "pydantic>=2.9",
+    "ruamel-yaml>=0.18",
+]
 
 [project.urls]
 Homepage = "https://github.com/baranylcn/strop"
@@ -63,6 +66,7 @@ max-statements = 40
 python_version = "3.11"
 strict = true
 files = ["src", "tests"]
+plugins = ["pydantic.mypy"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
