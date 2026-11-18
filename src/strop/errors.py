@@ -49,6 +49,10 @@ class TransientLLMError(LLMError):
     """A temporary provider failure (rate limit, timeout, outage) that may succeed on retry."""
 
 
+class InvalidModelReplyError(LLMError):
+    """The model kept returning replies that do not match the requested JSON schema."""
+
+
 class BudgetExceededError(StropError):
     """A configured call, cost, or time budget was reached."""
 

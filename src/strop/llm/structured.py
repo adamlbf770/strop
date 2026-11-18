@@ -5,7 +5,7 @@ from typing import TypeVar
 
 from pydantic import BaseModel, ValidationError
 
-from strop.errors import LLMError
+from strop.errors import InvalidModelReplyError
 from strop.llm.client import LLMClient
 from strop.llm.types import LLMRequest, Message
 
@@ -47,4 +47,6 @@ async def complete_json(
                 ),
             ),
         ]
-    raise LLMError(f"the model did not return valid JSON after {attempts} attempt(s): {problem}")
+    raise InvalidModelReplyError(
+        f"the model did not return valid JSON after {attempts} attempt(s): {problem}"
+    )
