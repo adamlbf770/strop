@@ -9,6 +9,7 @@ from dataclasses import dataclass, field
 from typing import Any
 
 from strop.config.enums import ModelRole
+from strop.config.llm import ModelSpec
 from strop.data.models import Partition, Row
 from strop.errors import DataError
 from strop.evaluation.budget import BudgetTracker
@@ -55,6 +56,7 @@ class Evaluator:
     client: LLMClient
     repository: EvaluationRepository
     budget: BudgetTracker
+    target: ModelSpec
     schema: dict[str, Any] | None = None
     allow_test: bool = False
 
@@ -62,7 +64,7 @@ class Evaluator:
         """Hash of every setting that changes what an evaluation measures."""
         config = self.project.config
         payload = {
-            "target": config.models.resolve(ModelRole.TARGET).model_dump(mode="json"),
+            "target": self.target.model_dump(mode="json"),
             "output": config.output.model_dump(mode="json"),
             "metrics": config.metrics.model_dump(mode="json"),
         }
@@ -104,7 +106,7 @@ class Evaluator:
         config = self.project.config
         runner = PromptRunner(
             self.client,
-            config.models.resolve(ModelRole.TARGET),
+            self.target,
             config.output,
             self.schema,
             config.execution,
@@ -123,7 +125,7 @@ class Evaluator:
                 report=report,
                 outcomes=with_scores(outcomes, examples, self.suite),
                 details={
-                    "model": config.models.target.model,
+                    "model": self.target.model,
                     "fingerprint": self.fingerprint(),
                     **tag.details,
                 },
@@ -161,6 +163,7 @@ def build_evaluator(
         client=build_client(config.execution, cache),
         repository=EvaluationRepository(conn),
         budget=tracker,
+        target=config.models.resolve(ModelRole.TARGET),
         schema=load_output_schema(project.root, config.output),
         allow_test=allow_test,
     )
