@@ -4,7 +4,7 @@ Strop is a command-line tool that improves LLM prompts by testing them against y
 
 ## Status
 
-Alpha. Version 0.1.0. Commands and the `strop.yaml` format may change between releases. Strop is not published on PyPI yet, so you install it from a clone of this repository.
+Alpha. Version 0.1.0. Commands and the `strop.yaml` format may change between releases.
 
 ## What it does
 
@@ -25,17 +25,17 @@ Everything is local. Prompt versions, results, and cached model responses are st
 Strop needs Python 3.11 or newer.
 
 ```bash
-git clone https://github.com/baranylcn/strop.git
-cd strop
-pip install .
+pip install strop
 strop --version
 ```
+
+To keep Strop out of your other Python environments, install it with `pipx install strop` instead. To work on Strop itself, see [Development](#development).
 
 Strop calls models through [LiteLLM](https://docs.litellm.ai/docs/providers), so you can use any provider and model it supports. Set the API key your provider expects as an environment variable, or put it in a `.env` file in your project directory. Strop has no default model; you name every model yourself.
 
 ## Quick start
 
-The repository includes a ready-to-run example in `examples/ticket_routing`: 150 synthetic support tickets in five categories, with a deliberately vague starting prompt.
+The [repository](https://github.com/baranylcn/strop) includes a ready-to-run example in `examples/ticket_routing`: 150 synthetic support tickets in five categories, with a deliberately vague starting prompt. Clone the repository to get it.
 
 ```bash
 cd examples/ticket_routing
