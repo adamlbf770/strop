@@ -26,7 +26,11 @@ classifiers = [
 dependencies = [
     "pydantic>=2.9",
     "ruamel-yaml>=0.18",
+    "typer>=0.15",
 ]
+
+[project.scripts]
+strop = "strop.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/baranylcn/strop"
@@ -58,6 +62,9 @@ src = ["src", "tests"]
 select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF", "PT", "ASYNC", "PL"]
 ignore = ["PLR2004"]
 
+[tool.ruff.lint.per-file-ignores]
+"src/strop/cli/*" = ["PLR0913", "PLR0917"]
+
 [tool.ruff.lint.pylint]
 max-args = 7
 max-statements = 40
@@ -72,4 +79,5 @@ plugins = ["pydantic.mypy"]
 testpaths = ["tests"]
 asyncio_mode = "auto"
 asyncio_default_fixture_loop_scope = "function"
+pythonpath = ["."]
 addopts = "-ra --strict-markers --strict-config --import-mode=importlib"
