@@ -80,3 +80,8 @@ def test_every_configuration_key_is_documented() -> None:
             if key in {"model", "temperature", "max_tokens", "timeout_s", "params"}:
                 continue
             assert f"`{key}`" in text, f"{section}.{key}"
+
+
+def test_the_changelog_has_an_entry_for_the_current_version() -> None:
+    text = (ROOT / "CHANGELOG.md").read_text(encoding="utf-8")
+    assert f"## [{strop.__version__}]" in text

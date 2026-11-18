@@ -5,7 +5,7 @@ All notable changes to Strop are listed here. The format follows
 [Semantic Versioning](https://semver.org/). While Strop is in alpha, minor versions may change
 commands or the `strop.yaml` format.
 
-## [Unreleased]
+## [0.1.1] - 2026-11-18
 
 ### Fixed
 

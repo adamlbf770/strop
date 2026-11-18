@@ -25,6 +25,14 @@ uv run pytest
 The same checks run in CI on Linux, Windows, and macOS. The tests use scripted models and make
 no network calls.
 
+## Releasing
+
+1. Set the new version in `src/strop/__init__.py` and add a section for it to `CHANGELOG.md`.
+   A test fails if the changelog has no entry for the current version.
+2. Commit and push to `main`, and wait until CI is green.
+3. Tag that exact commit and push the tag: `git tag vX.Y.Z` and `git push origin vX.Y.Z`. The
+   release workflow refuses a tag that does not match `strop.__version__`.
+
 ## Project layout
 
 ```text
