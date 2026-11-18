@@ -6,11 +6,12 @@ from typing import Annotated, Any
 import typer
 from pydantic import ValidationError
 
+from strop.cli.options import DirOption
 from strop.config import DatasetFormat, OutputType, StropConfig
 from strop.config.constraints import parse_constraints
 from strop.config.io import format_errors
 from strop.errors import ConfigError
-from strop.scaffold import data_recipients, scaffold_project
+from strop.services.scaffold import data_recipients, scaffold_project
 
 Option = typer.Option
 
@@ -47,7 +48,7 @@ def init_command(
     ] = None,
     id_column: Annotated[str | None, Option(help="Dataset column with a unique row id.")] = None,
     seed: Annotated[int, Option(help="Random seed for data splits.")] = 42,
-    directory: Annotated[Path, Option("--dir", help="Project directory.")] = Path(),
+    directory: DirOption = Path(),
     force: Annotated[bool, Option(help="Overwrite an existing strop.yaml.")] = False,
 ) -> None:
     """Create strop.yaml, a starter prompt, and the local .strop/ state directory."""

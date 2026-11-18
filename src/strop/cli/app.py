@@ -6,6 +6,7 @@ from typing import Annotated
 import typer
 
 from strop import __version__
+from strop.cli.data import data_app
 from strop.cli.init import init_command
 from strop.errors import ExitCode, StropError
 
@@ -17,6 +18,7 @@ app = typer.Typer(
     pretty_exceptions_enable=False,
 )
 app.command("init")(init_command)
+app.add_typer(data_app, name="data")
 
 
 def _show_version(value: bool) -> None:
