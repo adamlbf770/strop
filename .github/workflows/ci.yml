@@ -10,12 +10,18 @@ permissions:
 
 jobs:
   check:
-    name: Python ${{ matrix.python-version }}
-    runs-on: ubuntu-latest
+    name: ${{ matrix.os }} / Python ${{ matrix.python-version }}
+    runs-on: ${{ matrix.os }}
     strategy:
       fail-fast: false
       matrix:
+        os: [ubuntu-latest]
         python-version: ["3.11", "3.12", "3.13"]
+        include:
+          - os: windows-latest
+            python-version: "3.12"
+          - os: macos-latest
+            python-version: "3.12"
     steps:
       - uses: actions/checkout@v7
       - uses: astral-sh/setup-uv@v10.3.3
@@ -40,3 +46,8 @@ jobs:
         run: uv build
       - name: Check metadata
         run: uvx twine check dist/*
+      - name: Install the wheel and run the command
+        run: |
+          uv venv /tmp/strop-venv
+          uv pip install --python /tmp/strop-venv/bin/python dist/*.whl
+          /tmp/strop-venv/bin/strop --version
