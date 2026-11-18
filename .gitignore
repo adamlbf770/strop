@@ -1,0 +1,39 @@
+# Local-only files
+.claude
+CLAUDE.md
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Tool caches and reports
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+.coverage.*
+htmlcov/
+coverage.xml
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Strop runtime data (created inside user projects)
+.strop/
+
+# Editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
