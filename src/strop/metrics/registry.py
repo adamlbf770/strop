@@ -7,6 +7,15 @@ from strop.config.metrics import RuleSpec
 from strop.errors import ConfigError
 from strop.metrics.basic import ExactMatch, ValidOutputRate
 from strop.metrics.classification import Accuracy, Average, Averaged, ClassScore, Kind
+from strop.metrics.rules import RuleMetric
+from strop.metrics.structured import (
+    FieldAccuracy,
+    FieldCompleteness,
+    FieldF1,
+    JsonValid,
+    SchemaValid,
+)
+from strop.metrics.text import NumericClose, Similarity
 from strop.metrics.types import Metric
 
 _AVERAGES: tuple[Average, ...] = ("macro", "micro", "weighted")
@@ -34,6 +43,13 @@ def _simple_factories() -> dict[str, Factory]:
         "accuracy": lambda ctx: Accuracy(ctx.labels),
         "exact_match": lambda ctx: ExactMatch(),
         "valid_output_rate": lambda ctx: ValidOutputRate(),
+        "json_valid": lambda ctx: JsonValid(),
+        "schema_valid": lambda ctx: SchemaValid(),
+        "field_completeness": lambda ctx: FieldCompleteness(),
+        "field_accuracy": lambda ctx: FieldAccuracy(),
+        "field_f1": lambda ctx: FieldF1(),
+        "similarity": lambda ctx: Similarity(),
+        "numeric_close": lambda ctx: NumericClose(),
     }
     for average in _AVERAGES:
         for kind in _KINDS:
@@ -52,8 +68,26 @@ def _class_factory(kind: Kind) -> ParamFactory:
     return build
 
 
+def _rule_factory(name: str, ctx: MetricContext) -> Metric:
+    if name not in ctx.rules:
+        defined = ", ".join(ctx.rules) or "none"
+        raise ConfigError(f"rule '{name}' is not defined under metrics.rules; defined: {defined}")
+    return RuleMetric(name, ctx.rules[name])
+
+
+def _numeric_close_factory(tolerance: str, ctx: MetricContext) -> Metric:
+    try:
+        return NumericClose(float(tolerance))
+    except ValueError:
+        raise ConfigError(f"metric 'numeric_close:{tolerance}' needs a numeric tolerance") from None
+
+
 _SIMPLE = _simple_factories()
-_PARAMETERIZED: dict[str, ParamFactory] = {kind: _class_factory(kind) for kind in _KINDS}
+_PARAMETERIZED: dict[str, ParamFactory] = {
+    **{kind: _class_factory(kind) for kind in _KINDS},
+    "rule": _rule_factory,
+    "numeric_close": _numeric_close_factory,
+}
 
 
 def known_metric_names() -> list[str]:
