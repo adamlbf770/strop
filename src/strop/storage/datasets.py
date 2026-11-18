@@ -97,3 +97,12 @@ class DatasetRepository:
             "SELECT row_id, partition FROM split_assignments WHERE split_id = ?", (split_id,)
         ).fetchall()
         return {r["row_id"]: Partition(r["partition"]) for r in rows}
+
+    def partition_counts(self, split_id: int) -> dict[Partition, int]:
+        rows = self._conn.execute(
+            "SELECT partition, COUNT(*) AS n FROM split_assignments WHERE split_id = ? "
+            "GROUP BY partition",
+            (split_id,),
+        ).fetchall()
+        counts = {Partition(r["partition"]): r["n"] for r in rows}
+        return {partition: counts.get(partition, 0) for partition in Partition}

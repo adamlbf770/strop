@@ -7,8 +7,10 @@ import typer
 
 from strop import __version__
 from strop.cli.data import data_app
+from strop.cli.evaluate import baseline_command, eval_command
 from strop.cli.init import init_command
 from strop.cli.prompts import prompt_app
+from strop.cli.status import status_command
 from strop.cli.versions import diff_command, history_command, rollback_command
 from strop.errors import ExitCode, StropError
 
@@ -25,6 +27,9 @@ app.add_typer(prompt_app, name="prompt")
 app.command("diff")(diff_command)
 app.command("history")(history_command)
 app.command("rollback")(rollback_command)
+app.command("baseline")(baseline_command)
+app.command("eval")(eval_command)
+app.command("status")(status_command)
 
 
 def _show_version(value: bool) -> None:
