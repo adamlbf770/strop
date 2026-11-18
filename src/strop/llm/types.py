@@ -56,3 +56,4 @@ class LLMResponse(_Frozen):
     usage: Usage = Field(default_factory=Usage)
     latency_s: float = 0.0
     request_id: str | None = None
+    cached: bool = False

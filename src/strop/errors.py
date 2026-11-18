@@ -45,6 +45,10 @@ class LLMError(StropError):
     """A model provider call failed after retries."""
 
 
+class TransientLLMError(LLMError):
+    """A temporary provider failure (rate limit, timeout, outage) that may succeed on retry."""
+
+
 class BudgetExceededError(StropError):
     """A configured call, cost, or time budget was reached."""
 

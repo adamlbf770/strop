@@ -25,6 +25,7 @@ classifiers = [
 ]
 dependencies = [
     "jsonschema>=4.23",
+    "litellm>=1.60",
     "pydantic>=2.9",
     "ruamel-yaml>=0.18",
     "typer>=0.15",
