@@ -6,6 +6,7 @@ from pathlib import Path
 from strop import __version__
 from strop.config import OutputType, StropConfig, dump_config
 from strop.errors import ConfigError
+from strop.evaluation.parsing import load_output_schema
 from strop.prompts import PromptMessage, PromptTemplate, dump_prompt
 from strop.services.metrics import validate_metric_names
 from strop.storage import ProjectPaths, open_database
@@ -19,6 +20,7 @@ def scaffold_project(config: StropConfig, root: Path, *, force: bool = False) ->
     dataset_file = root / config.dataset.path
     if not dataset_file.is_file():
         raise ConfigError(f"dataset file not found: {dataset_file}")
+    load_output_schema(root, config.output)
     validate_metric_names(config)
     if config.metrics.python is not None and not (root / config.metrics.python.file).is_file():
         raise ConfigError(f"metric file not found: {root / config.metrics.python.file}")

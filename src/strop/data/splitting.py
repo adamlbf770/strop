@@ -19,14 +19,26 @@ class SplitSummary:
     warnings: list[str] = field(default_factory=list)
 
 
+def stratify_groups(rows: Sequence[Row], config: SplitConfig) -> dict[str, list[Row]]:
+    """Group rows by expected value, or into one group when grouping would not help.
+
+    Stratifying only makes sense for class-like values that repeat. If more than half of the
+    groups would hold a single row (free text, JSON objects, numbers), the split is random.
+    """
+    ordered = sorted(rows, key=lambda r: r.id)
+    groups: dict[str, list[Row]] = defaultdict(list)
+    if config.stratify:
+        for row in ordered:
+            groups[row.expected if row.expected is not None else ""].append(row)
+    if not groups or len(groups) * 2 > len(rows):
+        return {"": ordered}
+    return dict(groups)
+
+
 def split_rows(rows: Sequence[Row], config: SplitConfig) -> dict[str, Partition]:
     """Assign every row to a partition. The same rows and config always give the same result."""
     ratios = (config.train, config.validation, config.test)
-    groups: dict[str, list[Row]] = defaultdict(list)
-    for row in sorted(rows, key=lambda r: r.id):
-        key = row.expected if config.stratify and row.expected is not None else ""
-        groups[key].append(row)
-
+    groups = stratify_groups(rows, config)
     rng = random.Random(config.seed)
     assignments: dict[str, Partition] = {}
     for key in sorted(groups):
@@ -65,12 +77,13 @@ def summarize(
         warnings.append(
             "there is no test partition; the final result cannot be checked on unseen data"
         )
-    labels = {r.expected for r in rows if r.expected is not None}
-    for partition in (Partition.TRAIN, Partition.VALIDATION):
-        seen = {r.expected for r in rows if assignments[r.id] is partition}
-        absent = sorted(labels - seen)
-        if config.stratify and absent:
-            warnings.append(f"no '{partition.value}' rows for: {', '.join(absent)}")
+    if len(stratify_groups(rows, config)) > 1:
+        labels = {r.expected for r in rows if r.expected is not None}
+        for partition in (Partition.TRAIN, Partition.VALIDATION):
+            seen = {r.expected for r in rows if assignments[r.id] is partition}
+            absent = sorted(labels - seen)
+            if absent:
+                warnings.append(f"no '{partition.value}' rows for: {', '.join(absent)}")
     return SplitSummary(counts, warnings)
 
 

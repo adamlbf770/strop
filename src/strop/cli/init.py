@@ -34,6 +34,9 @@ def init_command(
         list[str] | None, Option(help="Dataset column kept as metadata. Repeatable.")
     ] = None,
     labels: Annotated[str, Option(help="Comma-separated labels, for output type 'label'.")] = "",
+    output_schema: Annotated[
+        Path | None, Option(help="JSON schema file the output must satisfy, for type 'json'.")
+    ] = None,
     secondary_metric: Annotated[
         list[str] | None, Option(help="Additional metric to report. Repeatable.")
     ] = None,
@@ -74,6 +77,7 @@ def init_command(
         "output": {
             "type": output_type,
             "labels": [item.strip() for item in labels.split(",") if item.strip()],
+            "schema_file": str(output_schema) if output_schema else None,
         },
         "models": _models(target_model, optimizer_model, analyzer_model, judge_model),
         "metrics": {

@@ -72,3 +72,30 @@ def test_summary_has_no_warnings_for_a_healthy_split() -> None:
     summary = summarize(rows, split_rows(rows, config), config)
     assert summary.warnings == []
     assert summary.counts[Partition.VALIDATION] == 40
+
+
+def free_text_rows(count: int) -> list[Row]:
+    return [Row(f"r{i:03d}", i + 1, {"t": "x"}, f'{{"id": {i}}}', {}, "h") for i in range(count)]
+
+
+def test_unique_expected_values_fall_back_to_a_random_split() -> None:
+    rows = free_text_rows(60)
+    counts = Counter(split_rows(rows, SplitConfig()).values())
+    assert counts == {Partition.TRAIN: 36, Partition.VALIDATION: 12, Partition.TEST: 12}
+
+
+def test_random_fallback_does_not_warn_about_missing_classes() -> None:
+    rows = free_text_rows(60)
+    config = SplitConfig()
+    summary = summarize(rows, split_rows(rows, config), config)
+    assert not any("rows for:" in warning for warning in summary.warnings)
+
+
+def test_stratify_can_be_turned_off() -> None:
+    rows = make_rows({"a": 80, "b": 20})
+    off = split_rows(rows, SplitConfig(stratify=False))
+    assert Counter(off.values()) == {
+        Partition.TRAIN: 60,
+        Partition.VALIDATION: 20,
+        Partition.TEST: 20,
+    }

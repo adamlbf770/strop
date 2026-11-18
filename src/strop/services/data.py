@@ -6,6 +6,7 @@ from typing import Any
 from strop.config.overrides import apply_overrides
 from strop.config.split import SplitConfig
 from strop.data import Dataset, SplitSummary, load_dataset, require_valid, split_rows, summarize
+from strop.data.splitting import stratify_groups
 from strop.services.project import Project
 from strop.storage.datasets import DatasetRepository
 
@@ -47,7 +48,7 @@ def create_split(project: Project, split: SplitConfig, *, skip_invalid: bool) ->
         created = split_id is None
         if split_id is None:
             assignments = split_rows(dataset.rows, split)
-            stratified = split.stratify and project.config.dataset.expected_column is not None
+            stratified = len(stratify_groups(dataset.rows, split)) > 1
             strategy = "stratified" if stratified else "random"
             split_id = repo.create_split(
                 dataset_id=dataset_id,
