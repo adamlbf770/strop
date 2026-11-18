@@ -19,6 +19,16 @@ class SplitRecord:
     config_json: str
 
 
+@dataclass(frozen=True, slots=True)
+class DatasetInfo:
+    id: int
+    content_hash: str
+    source_path: str
+    row_count: int
+    skipped_rows: int
+    skip_invalid: bool
+
+
 class DatasetRepository:
     def __init__(self, conn: sqlite3.Connection) -> None:
         self._conn = conn
@@ -106,3 +116,14 @@ class DatasetRepository:
         ).fetchall()
         counts = {Partition(r["partition"]): r["n"] for r in rows}
         return {partition: counts.get(partition, 0) for partition in Partition}
+
+    def dataset_info(self, dataset_id: int) -> DatasetInfo:
+        row = self._conn.execute("SELECT * FROM datasets WHERE id = ?", (dataset_id,)).fetchone()
+        return DatasetInfo(
+            row["id"],
+            row["content_hash"],
+            row["source_path"],
+            row["row_count"],
+            row["skipped_rows"],
+            bool(row["skip_invalid"]),
+        )

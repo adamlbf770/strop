@@ -80,8 +80,7 @@ def dump_prompt(template: PromptTemplate) -> str:
     """Serialize ``template`` as prompt YAML with readable multi-line blocks."""
     document = {
         "messages": [
-            {"role": m.role, "content": LiteralScalarString(_with_newline(m.content))}
-            for m in template.messages
+            {"role": m.role, "content": LiteralScalarString(m.content)} for m in template.messages
         ],
         "optimize": sorted(template.optimize),
     }
@@ -91,7 +90,3 @@ def dump_prompt(template: PromptTemplate) -> str:
     buffer = StringIO()
     yaml.dump(document, buffer)
     return buffer.getvalue()
-
-
-def _with_newline(text: str) -> str:
-    return text if text.endswith("\n") else text + "\n"

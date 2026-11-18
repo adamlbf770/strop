@@ -11,7 +11,7 @@ messages:
       Respond with exactly one of these labels and nothing else: billing, refund.
       A request for money back is "refund".
   - role: user
-    content: |
+    content: |-
       message: {{message}}
 optimize:
   - system

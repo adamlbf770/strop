@@ -9,6 +9,7 @@ from strop import __version__
 from strop.cli.analyze import analyze_command
 from strop.cli.data import data_app
 from strop.cli.evaluate import baseline_command, eval_command
+from strop.cli.export import clean_command, export_command
 from strop.cli.final import compare_command, final_test_command
 from strop.cli.init import init_command
 from strop.cli.optimize import approve_command, optimize_command, reject_command
@@ -40,6 +41,8 @@ app.command("approve")(approve_command)
 app.command("reject")(reject_command)
 app.command("test")(final_test_command)
 app.command("compare")(compare_command)
+app.command("export")(export_command)
+app.command("clean")(clean_command)
 
 
 def _show_version(value: bool) -> None:

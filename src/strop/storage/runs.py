@@ -108,6 +108,10 @@ class RunRepository:
         row = self._conn.execute("SELECT * FROM runs ORDER BY id DESC LIMIT 1").fetchone()
         return _run(row) if row else None
 
+    def all_runs(self) -> list[RunRecord]:
+        rows = self._conn.execute("SELECT * FROM runs ORDER BY id").fetchall()
+        return [_run(row) for row in rows]
+
     def resumable_run(self) -> RunRecord | None:
         marks = ", ".join("?" * len(RESUMABLE))
         row = self._conn.execute(
