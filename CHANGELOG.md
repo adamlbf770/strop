@@ -5,6 +5,13 @@ All notable changes to Strop are listed here. The format follows
 [Semantic Versioning](https://semver.org/). While Strop is in alpha, minor versions may change
 commands or the `strop.yaml` format.
 
+## [Unreleased]
+
+### Added
+
+- A documentation site at https://baranylcn.github.io/strop/, built with MkDocs Material and
+  published from `docs/` to GitHub Pages.
+
 ## [0.1.1] - 2026-11-18
 
 ### Fixed

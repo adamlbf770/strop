@@ -9,7 +9,11 @@ Strop is a command-line tool that improves LLM prompts by testing them against y
 
 ## Status
 
-Alpha. Version 0.1.0. Commands and the `strop.yaml` format may change between releases.
+Alpha. Commands and the `strop.yaml` format may change between releases.
+
+## Documentation
+
+The full documentation is at [baranylcn.github.io/strop](https://baranylcn.github.io/strop/).
 
 ## What it does
 
@@ -93,13 +97,13 @@ Strop cannot know what a correct output is. You define it, and Strop measures yo
 | A Python function (`--metric-file`) | You can compute a score in code. |
 | A judge rubric (`--rubric-file`) | Quality needs judgment and there are no reference answers. |
 
-Judge scores come from another language model, so they are estimates. Strop labels them as subjective and never mixes them with deterministic metrics. See [docs/metrics.md](https://github.com/baranylcn/strop/blob/main/docs/metrics.md) for every metric and `examples/support_replies` for rules, a custom metric, and judge rubrics together.
+Judge scores come from another language model, so they are estimates. Strop labels them as subjective and never mixes them with deterministic metrics. See the [metrics guide](https://baranylcn.github.io/strop/metrics/) for every metric and `examples/support_replies` for rules, a custom metric, and judge rubrics together.
 
 ## How a revision is accepted
 
 A candidate becomes the best prompt only if the primary metric improves by a minimum amount, every constraint you set still holds, the share of valid outputs does not drop, no class loses more than a set amount of F1, and the candidate wins on more validation examples than it loses. Every failed rule is recorded with the candidate.
 
-The test partition is locked in code. Nothing the optimizer sees comes from it, and `strop test` refuses to run without `--confirm`, or a second time without `--allow-rerun`, because tuning a prompt after looking at the test result makes the result optimistic. [docs/how-it-works.md](https://github.com/baranylcn/strop/blob/main/docs/how-it-works.md) explains the rules in detail.
+The test partition is locked in code. Nothing the optimizer sees comes from it, and `strop test` refuses to run without `--confirm`, or a second time without `--allow-rerun`, because tuning a prompt after looking at the test result makes the result optimistic. The [how it works guide](https://baranylcn.github.io/strop/how-it-works/) explains the rules in detail.
 
 ## Commands
 
@@ -159,7 +163,7 @@ messages:
 optimize: [system]
 ```
 
-The optimizer never touches messages outside `optimize`, never changes `{{variables}}`, and never changes text wrapped in `<strop:fixed>...</strop:fixed>`. Your file is not overwritten; revisions are stored as versions. The full reference is in [docs/configuration.md](https://github.com/baranylcn/strop/blob/main/docs/configuration.md).
+The optimizer never touches messages outside `optimize`, never changes `{{variables}}`, and never changes text wrapped in `<strop:fixed>...</strop:fixed>`. Your file is not overwritten; revisions are stored as versions. The full reference is in the [configuration guide](https://baranylcn.github.io/strop/configuration/).
 
 ## Models and providers
 

@@ -36,7 +36,7 @@ strop = "strop.cli:main"
 
 [project.urls]
 Homepage = "https://github.com/baranylcn/strop"
-Documentation = "https://github.com/baranylcn/strop/tree/main/docs"
+Documentation = "https://baranylcn.github.io/strop/"
 Changelog = "https://github.com/baranylcn/strop/blob/main/CHANGELOG.md"
 Issues = "https://github.com/baranylcn/strop/issues"
 
