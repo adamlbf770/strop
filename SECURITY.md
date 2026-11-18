@@ -27,7 +27,6 @@ are examples of what to report:
 - Dataset rows reaching a model, a file, or a provider that the configuration does not name.
 - Rows from the test partition reaching the optimizer or analyzer.
 - Code from a dataset being executed, or `metric.py` running outside its separate process.
-- A way to write outside the project directory through a command-line option or a file name.
 
 Problems in a model provider, in LiteLLM, or in another dependency should be reported to that
 project. A `metric.py` file is code you wrote and runs as written, so what it does is not a Strop
