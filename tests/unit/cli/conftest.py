@@ -1,3 +1,4 @@
+import re
 import sys
 from pathlib import Path
 
@@ -6,12 +7,14 @@ import pytest
 from strop.cli import main
 from tests.helpers import CliRunner, write_dataset
 
+_ANSI = re.compile(r"\x1b\[[0-9;]*m")
+
 
 @pytest.fixture
 def run_cli(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str]) -> CliRunner:
     """Run the real entry point and return (exit code, stdout, stderr)."""
 
-    def run(*args: str) -> tuple[int, str, str]:
+    def run(*args: str, raw: bool = False) -> tuple[int, str, str]:
         monkeypatch.setattr(sys, "argv", ["strop", *args])
         code = 0
         try:
@@ -19,7 +22,9 @@ def run_cli(monkeypatch: pytest.MonkeyPatch, capsys: pytest.CaptureFixture[str])
         except SystemExit as exc:
             code = int(exc.code or 0)
         captured = capsys.readouterr()
-        return code, captured.out, captured.err
+        if raw:
+            return code, captured.out, captured.err
+        return code, _ANSI.sub("", captured.out), _ANSI.sub("", captured.err)
 
     return run
 

@@ -108,7 +108,7 @@ def test_diff_plain_output_is_a_unified_diff(run_cli: CliRunner, project: Path) 
 
 def test_diff_color_always_emits_ansi_styles(run_cli: CliRunner, project: Path) -> None:
     add_edit(run_cli, project, "--use")
-    _, out, _ = run_cli("diff", "--dir", str(project), "--color", "always")
+    _, out, _ = run_cli("diff", "--dir", str(project), "--color", "always", raw=True)
     assert "\x1b[" in out
 
 
