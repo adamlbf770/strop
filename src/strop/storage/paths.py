@@ -25,15 +25,6 @@ class ProjectPaths:
     def database(self) -> Path:
         return self.state_dir / "strop.db"
 
-    @property
-    def runs_dir(self) -> Path:
-        return self.state_dir / "runs"
-
-    @property
-    def reports_dir(self) -> Path:
-        return self.state_dir / "reports"
-
     def ensure(self) -> None:
-        """Create the state directories if they do not exist."""
-        for directory in (self.state_dir, self.runs_dir, self.reports_dir):
-            directory.mkdir(parents=True, exist_ok=True)
+        """Create the state directory if it does not exist."""
+        self.state_dir.mkdir(parents=True, exist_ok=True)

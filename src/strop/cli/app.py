@@ -19,12 +19,18 @@ from strop.cli.versions import diff_command, history_command, rollback_command
 from strop.errors import ExitCode, StropError
 from strop.log import configure_logging
 
+EXIT_CODES_HELP = (
+    "Exit codes: 0 success, 1 failure, 2 usage or configuration error, "
+    "10 paused for approval, 11 stopped by a budget, 12 interrupted."
+)
+
 app = typer.Typer(
     name="strop",
     help="Improve LLM prompts by testing them against your own data.",
     no_args_is_help=True,
     add_completion=False,
     pretty_exceptions_enable=False,
+    epilog=EXIT_CODES_HELP,
 )
 app.command("init")(init_command)
 app.add_typer(data_app, name="data")

@@ -13,12 +13,11 @@ def test_paths_are_derived_from_the_root(tmp_path: Path) -> None:
     assert paths.database == tmp_path / ".strop" / "strop.db"
 
 
-def test_ensure_creates_state_directories(tmp_path: Path) -> None:
+def test_ensure_creates_the_state_directory(tmp_path: Path) -> None:
     paths = ProjectPaths(tmp_path)
     paths.ensure()
     paths.ensure()
-    assert paths.runs_dir.is_dir()
-    assert paths.reports_dir.is_dir()
+    assert paths.state_dir.is_dir()
 
 
 def test_connect_enforces_foreign_keys() -> None:

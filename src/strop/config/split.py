@@ -14,7 +14,6 @@ class SplitConfig(StrictModel):
     test: float = Field(default=0.2, ge=0, lt=1)
     seed: int = 42
     stratify: bool = True
-    keep_test_locked: bool = True
 
     @model_validator(mode="after")
     def _check_ratios(self) -> Self:
