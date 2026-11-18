@@ -1,5 +1,10 @@
 # Strop
 
+[![PyPI](https://img.shields.io/pypi/v/strop-cli)](https://pypi.org/project/strop-cli/)
+[![Python versions](https://img.shields.io/pypi/pyversions/strop-cli)](https://pypi.org/project/strop-cli/)
+[![CI](https://github.com/baranylcn/strop/actions/workflows/ci.yml/badge.svg)](https://github.com/baranylcn/strop/actions/workflows/ci.yml)
+[![License](https://img.shields.io/pypi/l/strop-cli)](https://github.com/baranylcn/strop/blob/main/LICENSE)
+
 Strop is a command-line tool that improves LLM prompts by testing them against your own data. It runs your prompt, scores the outputs with a metric you define, asks a model to revise the prompt based on the failures, and keeps a revision only when the measured results get better.
 
 ## Status
