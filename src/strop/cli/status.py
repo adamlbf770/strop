@@ -5,7 +5,7 @@ from pathlib import Path
 import typer
 
 from strop.cli.options import DirOption, JsonOption, emit_json
-from strop.reporting.evaluation_view import fmt
+from strop.formatting import fmt
 from strop.services.project import open_project
 from strop.storage.datasets import DatasetRepository
 from strop.storage.evaluations import EvaluationRepository

@@ -11,8 +11,9 @@ from strop.cli.options import DirOption, JsonOption, emit_json
 from strop.cli.progress import stderr_progress
 from strop.data.models import Partition
 from strop.evaluation.models import EvaluationRecord
+from strop.formatting import fmt
 from strop.reporting import ColorMode, make_console
-from strop.reporting.evaluation_view import fmt, record_payload, render_evaluation
+from strop.reporting.evaluation_view import record_payload, render_evaluation
 from strop.services.evaluate import BaselineOutcome, run_baseline, run_eval
 from strop.services.project import Project, open_project
 from strop.services.prompts import has_unregistered_edits

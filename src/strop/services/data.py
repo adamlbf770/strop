@@ -3,6 +3,7 @@
 from dataclasses import dataclass
 from typing import Any
 
+from strop.config.overrides import apply_overrides
 from strop.config.split import SplitConfig
 from strop.data import Dataset, SplitSummary, load_dataset, require_valid, split_rows, summarize
 from strop.services.project import Project
@@ -25,9 +26,7 @@ def check_dataset(project: Project) -> Dataset:
 
 def effective_split_config(project: Project, overrides: dict[str, Any]) -> SplitConfig:
     """The configured split settings with any non-None command-line overrides applied."""
-    values = project.config.split.model_dump()
-    values.update({key: value for key, value in overrides.items() if value is not None})
-    return SplitConfig.model_validate(values)
+    return apply_overrides(project.config.split, overrides)
 
 
 def create_split(project: Project, split: SplitConfig, *, skip_invalid: bool) -> SplitOutcome:

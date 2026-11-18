@@ -1,5 +1,7 @@
 """Evaluating prompt versions on dataset partitions and storing the results."""
 
+import hashlib
+import json
 import sqlite3
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -51,6 +53,31 @@ class Evaluator:
     schema: dict[str, Any] | None = None
     allow_test: bool = False
 
+    def fingerprint(self) -> str:
+        """Hash of every setting that changes what an evaluation measures."""
+        config = self.project.config
+        payload = {
+            "target": config.models.resolve(ModelRole.TARGET).model_dump(mode="json"),
+            "output": config.output.model_dump(mode="json"),
+            "metrics": config.metrics.model_dump(mode="json"),
+        }
+        return hashlib.sha256(json.dumps(payload, sort_keys=True).encode()).hexdigest()
+
+    def reusable(self, version: PromptVersion, partition: Partition) -> EvaluationRecord | None:
+        """A stored full-partition evaluation of ``version`` made under the same settings."""
+        expected = len(self.partitions.get(partition))
+        for record in self.repository.find(
+            prompt_number=version.number, partition=partition, limit=50
+        ):
+            if (
+                record.split_id == self.partitions.split_id
+                and record.sample_count == expected
+                and not record.details.get("sampled")
+                and record.details.get("fingerprint") == self.fingerprint()
+            ):
+                return record
+        return None
+
     def rows(self, partition: Partition) -> list[Row]:
         if partition is Partition.TEST and not self.allow_test:
             raise DataError("the test partition is locked; it is only used by 'strop test'")
@@ -89,7 +116,11 @@ class Evaluator:
                 kind=tag.kind,
                 report=report,
                 outcomes=with_scores(outcomes, examples, self.suite),
-                details={"model": config.models.target.model, **tag.details},
+                details={
+                    "model": config.models.target.model,
+                    "fingerprint": self.fingerprint(),
+                    **tag.details,
+                },
                 run_id=tag.run_id,
             )
         )

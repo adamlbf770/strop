@@ -9,17 +9,7 @@ from rich.table import Table
 from rich.text import Text
 
 from strop.evaluation.models import EvaluationRecord, ExampleOutcome, UsageSummary
-
-MAX_TEXT = 70
-
-
-def fmt(value: float | None, digits: int = 4) -> str:
-    return "n/a" if value is None else f"{value:.{digits}f}"
-
-
-def shorten(text: str, limit: int = MAX_TEXT) -> str:
-    flat = " ".join(text.split())
-    return flat if len(flat) <= limit else flat[: limit - 3] + "..."
+from strop.formatting import fmt, shorten
 
 
 def render_evaluation(
