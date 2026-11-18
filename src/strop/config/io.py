@@ -28,7 +28,7 @@ def load_config(path: Path) -> StropConfig:
     try:
         return StropConfig.model_validate(data)
     except ValidationError as exc:
-        raise ConfigError(f"invalid configuration in {path}:\n{_format_errors(exc)}") from exc
+        raise ConfigError(f"invalid configuration in {path}:\n{format_errors(exc)}") from exc
 
 
 def dump_config(config: StropConfig, path: Path, *, force: bool = False) -> None:
@@ -43,7 +43,8 @@ def dump_config(config: StropConfig, path: Path, *, force: bool = False) -> None
         yaml.dump(document, handle)
 
 
-def _format_errors(exc: ValidationError) -> str:
+def format_errors(exc: ValidationError) -> str:
+    """One indented ``field.path: message`` line per validation error."""
     lines = []
     for error in exc.errors():
         location = ".".join(str(part) for part in error["loc"]) or "(root)"
