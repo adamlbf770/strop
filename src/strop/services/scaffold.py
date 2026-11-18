@@ -1,15 +1,12 @@
 """Creating a new Strop project on disk."""
 
 from datetime import UTC, datetime
-from io import StringIO
 from pathlib import Path
-
-from ruamel.yaml import YAML
-from ruamel.yaml.scalarstring import LiteralScalarString
 
 from strop import __version__
 from strop.config import OutputType, StropConfig, dump_config
 from strop.errors import ConfigError
+from strop.prompts import PromptMessage, PromptTemplate, dump_prompt
 from strop.storage import ProjectPaths, open_database
 
 
@@ -56,7 +53,11 @@ def data_recipients(config: StropConfig) -> list[str]:
 
 
 def starter_prompt(config: StropConfig) -> str:
-    """A minimal prompt file the user is expected to edit before running."""
+    """A minimal prompt file the user is expected to edit before running.
+
+    The format follows the prompt file extension: YAML messages for ``.yaml``/``.yml``,
+    a single plain-text template otherwise.
+    """
     system = config.project.task_description.strip()
     if config.output.type is OutputType.LABEL:
         labels = ", ".join(config.output.labels)
@@ -64,16 +65,9 @@ def starter_prompt(config: StropConfig) -> str:
     elif config.output.type is OutputType.JSON:
         system += "\nRespond with a single valid JSON object and nothing else."
     user = "\n".join(f"{name}: {{{{{name}}}}}" for name in config.dataset.input_columns)
-    document = {
-        "messages": [
-            {"role": "system", "content": LiteralScalarString(system + "\n")},
-            {"role": "user", "content": LiteralScalarString(user + "\n")},
-        ],
-        "optimize": ["system"],
-    }
-    yaml = YAML()
-    yaml.default_flow_style = False
-    yaml.indent(mapping=2, sequence=4, offset=2)
-    buffer = StringIO()
-    yaml.dump(document, buffer)
-    return buffer.getvalue()
+    if config.prompt.file.suffix.lower() not in {".yaml", ".yml"}:
+        return f"{system}\n\n{user}\n"
+    template = PromptTemplate(
+        (PromptMessage("system", system), PromptMessage("user", user)), frozenset({"system"})
+    )
+    return dump_prompt(template)
