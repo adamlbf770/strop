@@ -51,3 +51,12 @@ jobs:
           uv venv /tmp/strop-venv
           uv pip install --python /tmp/strop-venv/bin/python dist/*.whl
           /tmp/strop-venv/bin/strop --version
+
+  docs:
+    name: Build docs
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: astral-sh/setup-uv@v10.3.3
+      - name: Build the site and fail on any warning
+        run: uv run --locked --only-group docs mkdocs build --strict
