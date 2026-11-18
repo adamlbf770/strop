@@ -1,0 +1,10 @@
+messages:
+  - role: system
+    content: |-
+      You answer customer questions for an online shop.
+      Be helpful and polite.
+  - role: user
+    content: |-
+      Question: {{question}}
+optimize:
+  - system

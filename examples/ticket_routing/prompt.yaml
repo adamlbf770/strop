@@ -1,0 +1,11 @@
+messages:
+  - role: system
+    content: |-
+      You route customer messages to a support team.
+      Reply with one category: billing, refund, exchange, technical, or other.
+      Reply with the category only.
+  - role: user
+    content: |-
+      Message: {{customer_message}}
+optimize:
+  - system

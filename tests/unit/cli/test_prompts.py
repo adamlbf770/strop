@@ -148,3 +148,17 @@ def test_history_json_output(run_cli: CliRunner, project: Path) -> None:
     payload = json.loads(out)
     assert payload["best"] == 1
     assert [v["version"] for v in payload["versions"]] == [1, 2]
+
+
+def test_show_before_the_first_run_displays_the_prompt_file(
+    run_cli: CliRunner, project: Path
+) -> None:
+    code, out, _ = run_cli("prompt", "show", "--dir", str(project))
+    assert code == 0
+    assert "prompt.yaml (not registered yet; it becomes v1 on the first run)" in out
+    assert "--- system (editable)" in out
+    assert "{{message}}" in out
+    _, raw, _ = run_cli("prompt", "show", "--dir", str(project), "--json")
+    payload = json.loads(raw)
+    assert payload["version"] is None
+    assert payload["file"] == "prompt.yaml"

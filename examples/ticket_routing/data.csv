@@ -1,0 +1,151 @@
+ticket_id,customer_message,category,channel
+T-0001,I get error 502 when I upload a file larger than 1740 MB.,technical,chat
+T-0002,Can I speak to someone about a partnership in Austin?,other,email
+T-0003,"I was charged for the jacket I already sent back, please reverse it.",refund,web form
+T-0004,Two-factor codes are not being accepted on my laptop.,technical,chat
+T-0005,Can you send me a PDF invoice for November?,billing,web form
+T-0006,Do you sponsor local events in Denver?,other,chat
+T-0007,Can I get my receipts for the whole year in one file?,billing,chat
+T-0008,Why was my card billed on the 23th? I thought renewal was on the 1st.,billing,web form
+T-0009,"I want my money back for the desk lamp, it arrived broken.",refund,chat
+T-0010,Can I speak to someone about a partnership in Leeds?,other,email
+T-0011,What are your support hours during the holidays?,other,email
+T-0012,"The backpack arrived damaged, can you send me a new one?",exchange,chat
+T-0013,"Return the charge to my card, the service did not work as described.",refund,email
+T-0014,I returned the running shoes three weeks ago and the refund has not shown up.,refund,email
+T-0015,I would like to leave feedback about your website design.,other,email
+T-0016,"The zipper on my water bottle broke, please ship me a replacement.",exchange,email
+T-0017,"I need a large instead of the small I ordered, how do I exchange it?",exchange,web form
+T-0018,"I need a XL instead of the small I ordered, how do I exchange it?",exchange,chat
+T-0019,"My Pro plan price went up without notice, can you explain the new amount?",billing,chat
+T-0020,"The zipper on my desk lamp broke, please ship me a replacement.",exchange,chat
+T-0021,Notifications stopped appearing on my iPhone after the last update.,technical,chat
+T-0022,"I want my money back for the backpack, it arrived broken.",refund,web form
+T-0023,Is the jacket made in a factory that follows fair labor rules?,other,chat
+T-0024,Can you send me a PDF invoice for September?,billing,email
+T-0025,Can I trade this blender for the newer model?,exchange,web form
+T-0026,My invoice shows 53 dollars but my plan costs 81 dollars.,billing,email
+T-0027,Can I speak to someone about a partnership in Osaka?,other,email
+T-0028,Do you have a store in Denver?,other,chat
+T-0029,Can I replace my running shoes with a bigger version? Happy to pay the difference.,exchange,web form
+T-0030,Why was my card billed on the 19th? I thought renewal was on the 1st.,billing,chat
+T-0031,Notifications stopped appearing on my tablet after the last update.,technical,chat
+T-0032,Two-factor codes are not being accepted on my Android phone.,technical,web form
+T-0033,I get error 502 when I upload a file larger than 2381 MB.,technical,web form
+T-0034,My invoice shows 17 dollars but my plan costs 98 dollars.,billing,web form
+T-0035,"I want my money back for the water bottle, it arrived broken.",refund,web form
+T-0036,"I ordered the grey desk lamp but would prefer red, is a swap possible?",exchange,chat
+T-0037,"Cancel my Premium subscription and refund this month, I never used it.",refund,email
+T-0038,"Cancel my Team subscription and refund this month, I never used it.",refund,email
+T-0039,My invoice shows 72 dollars but my plan costs 30 dollars.,billing,web form
+T-0040,Do you have a store in Austin?,other,email
+T-0041,I get error 502 when I upload a file larger than 8712 MB.,technical,web form
+T-0042,The headphones never arrived and I would like a refund.,refund,email
+T-0043,Can I get a demo of the Starter plan for my team of 82 people?,other,chat
+T-0044,"The headphones arrived damaged, can you send me a new one?",exchange,web form
+T-0045,Do you have a store in Lisbon?,other,chat
+T-0046,Why was my card billed on the 4th? I thought renewal was on the 1st.,billing,chat
+T-0047,"I need a medium instead of the XL I ordered, how do I exchange it?",exchange,chat
+T-0048,Can I get a demo of the Team plan for my team of 86 people?,other,web form
+T-0049,My account says I have no permission to open reports even though I am the admin.,technical,chat
+T-0050,The keyboard never arrived and I would like a refund.,refund,web form
+T-0051,"I was charged for the water bottle I already sent back, please reverse it.",refund,email
+T-0052,I was charged twice for my Premium subscription this month.,billing,chat
+T-0053,"The blender I got is the wrong size, can I swap it for a medium?",exchange,chat
+T-0054,Dark mode resets to light every time I restart the app on my tablet.,technical,email
+T-0055,Do you sponsor local events in Osaka?,other,chat
+T-0056,"The backpack was the wrong size and I do not want another one, just give me my money back.",refund,chat
+T-0057,Why was my card billed on the 18th? I thought renewal was on the 1st.,billing,web form
+T-0058,I was charged twice for my Starter subscription this month.,billing,email
+T-0059,The reports page loads forever and then shows a blank screen.,technical,email
+T-0060,"I ordered the blue phone case but would prefer blue, is a swap possible?",exchange,web form
+T-0061,Are you hiring for customer support in Osaka?,other,chat
+T-0062,Why was my card billed on the 6th? I thought renewal was on the 1st.,billing,email
+T-0063,"I ordered the red water bottle but would prefer grey, is a swap possible?",exchange,web form
+T-0064,Please refund order #1554. I changed my mind and have not opened it.,refund,email
+T-0065,My invoice shows 77 dollars but my plan costs 69 dollars.,billing,email
+T-0066,The phone case never arrived and I would like a refund.,refund,email
+T-0067,"I want my money back for the headphones, it arrived broken.",refund,chat
+T-0068,Can I speak to someone about a partnership in Denver?,other,chat
+T-0069,"The zipper on my headphones broke, please ship me a replacement.",exchange,email
+T-0070,Do you plan to release the chat in other languages?,other,web form
+T-0071,Dark mode resets to light every time I restart the app on my iPhone.,technical,chat
+T-0072,Two-factor codes are not being accepted on my iPhone.,technical,web form
+T-0073,My invoice shows 45 dollars but my plan costs 74 dollars.,billing,web form
+T-0074,"The desk lamp I got is the wrong size, can I swap it for a large?",exchange,email
+T-0075,"The water bottle was the wrong size and I do not want another one, just give me my money back.",refund,email
+T-0076,The chat page loads forever and then shows a blank screen.,technical,email
+T-0077,Sync stopped working on my iPhone yesterday.,technical,web form
+T-0078,Can I trade this keyboard for the newer model?,exchange,email
+T-0079,I get error 502 when I upload a file larger than 4630 MB.,technical,email
+T-0080,Can I get a demo of the Pro plan for my team of 84 people?,other,web form
+T-0081,"The water bottle arrived damaged, can you send me a new one?",exchange,email
+T-0082,Is the phone case made in a factory that follows fair labor rules?,other,email
+T-0083,Dark mode resets to light every time I restart the app on my Android phone.,technical,email
+T-0084,Who should I contact about press inquiries in Leeds?,other,web form
+T-0085,My invoice shows 89 dollars but my plan costs 36 dollars.,billing,chat
+T-0086,"Please change my billing address, the invoices still go to my old office.",billing,web form
+T-0087,The export button in settings does nothing when I click it.,technical,email
+T-0088,Is the keyboard made in a factory that follows fair labor rules?,other,email
+T-0089,"The zipper on my blender broke, please ship me a replacement.",exchange,email
+T-0090,"I cannot log in, the password reset email never arrives.",technical,chat
+T-0091,I would like to exchange the blue headphones for a green one.,exchange,web form
+T-0092,I was charged twice for my Pro subscription this month.,billing,web form
+T-0093,The water bottle never arrived and I would like a refund.,refund,email
+T-0094,Can I replace my keyboard with a bigger version? Happy to pay the difference.,exchange,web form
+T-0095,How do I delete my account and all my data?,other,chat
+T-0096,"The running shoes was the wrong size and I do not want another one, just give me my money back.",refund,email
+T-0097,Who should I contact about press inquiries in Osaka?,other,email
+T-0098,Can you send me a PDF invoice for July?,billing,chat
+T-0099,My invoice shows 28 dollars but my plan costs 77 dollars.,billing,chat
+T-0100,Please refund order #8661. I changed my mind and have not opened it.,refund,web form
+T-0101,There is a charge from your company on my statement that I do not recognize.,billing,email
+T-0102,Notifications stopped appearing on my laptop after the last update.,technical,web form
+T-0103,I would like to exchange the black backpack for a blue one.,exchange,chat
+T-0104,Where can I find your privacy policy?,other,chat
+T-0105,The export button in dashboard does nothing when I click it.,technical,web form
+T-0106,Can you recommend which Premium features suit a small bakery in Denver?,other,web form
+T-0107,I returned the keyboard three weeks ago and the refund has not shown up.,refund,chat
+T-0108,"Received the wrong item, please send the correct running shoes instead.",exchange,email
+T-0109,I get error 502 when I upload a file larger than 3447 MB.,technical,email
+T-0110,Do you offer discounts for students or nonprofits?,other,chat
+T-0111,"I cancelled my Team plan within the first week, so I expect a full refund.",refund,email
+T-0112,"The desk lamp I got is the wrong size, can I swap it for a small?",exchange,email
+T-0113,Can you send me a PDF invoice for May?,billing,web form
+T-0114,Is there an affiliate program I can join?,other,web form
+T-0115,"I want my money back for the running shoes, it arrived broken.",refund,chat
+T-0116,Do you have a store in Leeds?,other,chat
+T-0117,"I ordered the green headphones but would prefer grey, is a swap possible?",exchange,web form
+T-0118,My account says I have no permission to open settings even though I am the admin.,technical,chat
+T-0119,Dark mode resets to light every time I restart the app on my laptop.,technical,chat
+T-0120,I need to update the credit card on my account before the next payment.,billing,chat
+T-0121,My invoice shows 64 dollars but my plan costs 19 dollars.,billing,email
+T-0122,"Received the wrong item, please send the correct water bottle instead.",exchange,email
+T-0123,The export button in reports does nothing when I click it.,technical,chat
+T-0124,Please refund order #5162. I changed my mind and have not opened it.,refund,web form
+T-0125,Please swap my blender for the same one in green.,exchange,web form
+T-0126,"This phone case stopped working after two days. I want a refund, not a replacement.",refund,chat
+T-0127,Can you send me a PDF invoice for January?,billing,email
+T-0128,Who should I contact about press inquiries in Denver?,other,chat
+T-0129,I was charged twice for my Team subscription this month.,billing,web form
+T-0130,Do you plan to release the calendar in other languages?,other,web form
+T-0131,The app crashes every time I open the dashboard tab.,technical,web form
+T-0132,Are you hiring for customer support in Leeds?,other,chat
+T-0133,Two-factor codes are not being accepted on my tablet.,technical,email
+T-0134,"I need a small instead of the medium I ordered, how do I exchange it?",exchange,email
+T-0135,"This water bottle stopped working after two days. I want a refund, not a replacement.",refund,email
+T-0136,"The yoga mat arrived damaged, can you send me a new one?",exchange,email
+T-0137,The payment failed but the money left my bank account anyway.,billing,email
+T-0138,"The backpack I got is the wrong size, can I swap it for a XL?",exchange,email
+T-0139,The app crashes every time I open the calendar tab.,technical,web form
+T-0140,"I want my money back for the jacket, it arrived broken.",refund,email
+T-0141,Notifications stopped appearing on my Android phone after the last update.,technical,chat
+T-0142,"My Team plan price went up without notice, can you explain the new amount?",billing,chat
+T-0143,"This yoga mat stopped working after two days. I want a refund, not a replacement.",refund,chat
+T-0144,My invoice shows 49 dollars but my plan costs 20 dollars.,billing,chat
+T-0145,My account says I have no permission to open dashboard even though I am the admin.,technical,web form
+T-0146,Please refund order #3026. I changed my mind and have not opened it.,refund,web form
+T-0147,"I was charged for the keyboard I already sent back, please reverse it.",refund,web form
+T-0148,"The keyboard I got is the wrong size, can I swap it for a small?",exchange,web form
+T-0149,My account says I have no permission to open chat even though I am the admin.,technical,email
+T-0150,"The yoga mat was the wrong size and I do not want another one, just give me my money back.",refund,web form

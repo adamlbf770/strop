@@ -1,0 +1,61 @@
+question_id,question,topic
+Q-001,Is the blender available in other colors?,products
+Q-002,Can I pay in installments?,payments
+Q-003,What materials is the yoga mat made of?,products
+Q-004,I forgot my password. How can I get back in?,account
+Q-005,My tracking number shows no updates for three days. What should I do?,shipping
+Q-006,What is your return policy for opened items?,returns
+Q-007,How long does standard shipping take to Denver?,shipping
+Q-008,Which payment methods do you accept?,payments
+Q-009,What materials is the water bottle made of?,products
+Q-010,How do I turn off marketing emails?,account
+Q-011,Does the blender come with a warranty?,products
+Q-012,Do you ship to Osaka?,shipping
+Q-013,Do you charge sales tax in Lisbon?,payments
+Q-014,Can I change the delivery address after ordering?,shipping
+Q-015,Is the phone case available in other colors?,products
+Q-016,Is the water bottle suitable for travel?,products
+Q-017,How long does standard shipping take to Lisbon?,shipping
+Q-018,What materials is the phone case made of?,products
+Q-019,Is the phone case suitable for travel?,products
+Q-020,How do I change the email address on my account?,account
+Q-021,Is the desk lamp suitable for travel?,products
+Q-022,Can I return a gift without the receipt?,returns
+Q-023,Do you charge sales tax in Osaka?,payments
+Q-024,Can I merge two accounts?,account
+Q-025,What materials is the jacket made of?,products
+Q-026,How do I start a return for the desk lamp?,returns
+Q-027,Is the backpack available in other colors?,products
+Q-028,How long does standard shipping take to Austin?,shipping
+Q-029,Is the keyboard suitable for travel?,products
+Q-030,Is the headphones suitable for travel?,products
+Q-031,Does the running shoes come with a warranty?,products
+Q-032,How long does standard shipping take to Osaka?,shipping
+Q-033,Who pays for return shipping?,returns
+Q-034,Do you ship to Denver?,shipping
+Q-035,Is the water bottle available in other colors?,products
+Q-036,Is the yoga mat available in other colors?,products
+Q-037,Do you ship to Austin?,shipping
+Q-038,Do you ship to Lisbon?,shipping
+Q-039,How do I start a return for the keyboard?,returns
+Q-040,Does the keyboard come with a warranty?,products
+Q-041,Why was my coupon code rejected?,payments
+Q-042,Do you charge sales tax in Austin?,payments
+Q-043,Is the keyboard available in other colors?,products
+Q-044,How do I start a return for the headphones?,returns
+Q-045,Do you ship to Leeds?,shipping
+Q-046,Does the water bottle come with a warranty?,products
+Q-047,How do I start a return for the yoga mat?,returns
+Q-048,Do you charge sales tax in Leeds?,payments
+Q-049,What materials is the headphones made of?,products
+Q-050,Does the phone case come with a warranty?,products
+Q-051,How long does standard shipping take to Leeds?,shipping
+Q-052,Is the jacket available in other colors?,products
+Q-053,Is the jacket suitable for travel?,products
+Q-054,How do I start a return for the water bottle?,returns
+Q-055,Does the headphones come with a warranty?,products
+Q-056,What materials is the keyboard made of?,products
+Q-057,Is the headphones available in other colors?,products
+Q-058,How do I start a return for the phone case?,returns
+Q-059,Does the backpack come with a warranty?,products
+Q-060,Does the jacket come with a warranty?,products

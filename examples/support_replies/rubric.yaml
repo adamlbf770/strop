@@ -1,0 +1,8 @@
+helpful:
+  criteria: The answer gives the customer a clear, correct next step or piece of information.
+  scale_min: 1
+  scale_max: 5
+polite:
+  criteria: The answer is courteous and respectful, without being wordy.
+  scale_min: 1
+  scale_max: 5

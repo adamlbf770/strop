@@ -7,8 +7,8 @@ import typer
 
 from strop.cli.options import DirOption, JsonOption, emit_json
 from strop.prompts.versions import PromptVersion
-from strop.services.project import open_project
-from strop.services.prompts import add_version_from_file, resolve_version
+from strop.services.project import Project, open_project
+from strop.services.prompts import add_version_from_file, load_project_prompt, resolve_version
 from strop.storage.prompts import PromptRepository
 
 prompt_app = typer.Typer(help="Add and inspect prompt versions.", no_args_is_help=True)
@@ -46,6 +46,9 @@ def show_command(
     project = open_project(directory)
     with project.database() as conn:
         repo = PromptRepository(conn)
+        if version is None and repo.first() is None:
+            _show_unregistered(project, as_json)
+            return
         selected = resolve_version(repo, version)
         is_best = repo.best_number() == selected.number
     if as_json:
@@ -54,6 +57,29 @@ def show_command(
     typer.echo(_header(selected, is_best=is_best))
     for message in selected.template.messages:
         editable = "editable" if selected.template.is_editable(message) else "frozen"
+        typer.echo(f"--- {message.role} ({editable})")
+        typer.echo(message.content.rstrip("\n"))
+
+
+def _show_unregistered(project: Project, as_json: bool) -> None:
+    """Before the first run there are no versions yet, so show the prompt file itself."""
+    template = load_project_prompt(project)
+    file = project.config.prompt.file
+    if as_json:
+        emit_json(
+            {
+                "version": None,
+                "file": str(file),
+                "messages": [
+                    {"role": m.role, "content": m.content, "editable": template.is_editable(m)}
+                    for m in template.messages
+                ],
+            }
+        )
+        return
+    typer.echo(f"{file} (not registered yet; it becomes v1 on the first run)")
+    for message in template.messages:
+        editable = "editable" if template.is_editable(message) else "frozen"
         typer.echo(f"--- {message.role} ({editable})")
         typer.echo(message.content.rstrip("\n"))
 
