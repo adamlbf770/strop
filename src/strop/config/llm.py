@@ -36,7 +36,7 @@ class ModelsConfig(StrictModel):
         spec = specs[role]
         if spec is None:
             raise ConfigError(
-                f"no model configured for the '{role.value}' role; "
-                f"set models.{role.value} or pass --{role.value}-model"
+                f"no model configured for the '{role.value}' role; set models.{role.value}.model "
+                f"in strop.yaml (strop init --{role.value}-model writes it)"
             )
         return spec

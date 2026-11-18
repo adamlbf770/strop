@@ -40,13 +40,17 @@ def optimize_command(
     max_calls: Annotated[int | None, Option(help="Model call budget for this run.", min=1)] = None,
     max_cost: Annotated[float | None, Option(help="Cost budget in USD.", min=0.0)] = None,
     max_minutes: Annotated[float | None, Option(help="Time budget in minutes.", min=0.0)] = None,
+    optimizer_model: Annotated[str | None, Option(help="Use this model as the optimizer.")] = None,
+    analyzer_model: Annotated[str | None, Option(help="Use this model as the analyzer.")] = None,
     resume: Annotated[bool, Option(help="Continue the unfinished run.")] = False,
     no_cache: NoCacheOption = False,
     as_json: JsonOption = False,
     directory: DirOption = Path(),
 ) -> None:
     """Run the optimization loop: test the prompt, revise it from the failures, and repeat."""
-    project = open_project(directory)
+    project = open_project(directory).with_models(
+        {"optimizer": optimizer_model, "analyzer": analyzer_model}
+    )
     settings = apply_overrides(
         project.config.optimization,
         {

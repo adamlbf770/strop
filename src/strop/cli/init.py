@@ -92,6 +92,7 @@ def init_command(
     for entry in scaffold_project(config, directory, force=force):
         typer.echo(f"Created {entry}")
     typer.echo(f"Note: dataset rows will be sent to: {', '.join(data_recipients(config))}")
+    typer.echo("Note: keep .strop/ and .env out of version control; they hold outputs and keys.")
 
 
 def _column_roles(inputs: list[str], expected: str | None, metadata: list[str]) -> dict[str, str]:

@@ -29,7 +29,8 @@ def build_suite(project: Project, judge: JudgeAccess | None = None) -> MetricSui
     for name, spec in config.metrics.judges.items():
         if judge is None:
             raise ConfigError(
-                f"judge metric '{name}' needs a judge model; set models.judge or pass --judge-model"
+                f"judge metric '{name}' needs a judge model; set models.judge.model in "
+                "strop.yaml (strop init --judge-model writes it)"
             )
         client, model = judge
         extra[f"judge:{name}"] = JudgeMetric(
@@ -54,10 +55,16 @@ def validate_metric_names(config: StropConfig) -> None:
     for name in (metrics.primary, *metrics.secondary, *metrics.constraints):
         if name == METRIC_NAME:
             if metrics.python is None:
-                raise ConfigError("metric 'custom' needs metrics.python (pass --metric-file)")
+                raise ConfigError(
+                    "metric 'custom' needs metrics.python in strop.yaml "
+                    "(strop init --metric-file writes it)"
+                )
         elif name.startswith("judge:"):
             if name.removeprefix("judge:") not in metrics.judges:
-                raise ConfigError(f"metric '{name}' has no rubric; pass --rubric-file")
+                raise ConfigError(
+                    f"metric '{name}' has no rubric under metrics.judges in strop.yaml "
+                    "(strop init --rubric-file writes it)"
+                )
         else:
             build_metric(name, context)
 

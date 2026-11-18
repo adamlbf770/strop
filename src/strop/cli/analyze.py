@@ -22,6 +22,9 @@ def analyze_command(
         bool, typer.Option("--patterns", help="Ask the analyzer model for failure patterns.")
     ] = False,
     examples: Annotated[int | None, typer.Option(help="Failed examples to list.", min=1)] = None,
+    analyzer_model: Annotated[
+        str | None, typer.Option(help="Use this model as the analyzer.")
+    ] = None,
     no_cache: NoCacheOption = False,
     as_json: JsonOption = False,
     directory: DirOption = Path(),
@@ -31,7 +34,7 @@ def analyze_command(
     Counts and examples are observed facts. With --patterns, an LLM also proposes recurring
     failure patterns; those are hypotheses, not verified findings.
     """
-    project = open_project(directory)
+    project = open_project(directory).with_models({"analyzer": analyzer_model})
     with project.database() as conn:
         selected, analysis = asyncio.run(
             run_analysis(
