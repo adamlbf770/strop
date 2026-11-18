@@ -1,0 +1,47 @@
+site_name: Strop
+site_description: Improve LLM prompts by testing them against your own data.
+site_url: https://baranylcn.github.io/strop/
+repo_url: https://github.com/baranylcn/strop
+repo_name: baranylcn/strop
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; 2026 Baran Yalcin
+
+theme:
+  name: material
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      toggle:
+        icon: material/weather-night
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to light mode
+  features:
+    - content.code.copy
+    - navigation.top
+    - search.highlight
+    - toc.follow
+
+nav:
+  - Home: index.md
+  - How it works: how-it-works.md
+  - Configuration: configuration.md
+  - Metrics: metrics.md
+
+markdown_extensions:
+  - admonition
+  - tables
+  - toc:
+      permalink: true
+  - pymdownx.highlight
+  - pymdownx.superfences
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/baranylcn/strop
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/strop-cli/

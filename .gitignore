@@ -37,3 +37,6 @@ coverage.xml
 .idea/
 .DS_Store
 Thumbs.db
+
+# Built documentation site
+site/
