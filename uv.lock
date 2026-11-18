@@ -2371,7 +2371,7 @@ wheels = [
 ]
 
 [[package]]
-name = "strop"
+name = "strop-cli"
 source = { editable = "." }
 dependencies = [
     { name = "jsonschema" },

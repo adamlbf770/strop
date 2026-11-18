@@ -25,11 +25,11 @@ Everything is local. Prompt versions, results, and cached model responses are st
 Strop needs Python 3.11 or newer.
 
 ```bash
-pip install strop
+pip install strop-cli
 strop --version
 ```
 
-To keep Strop out of your other Python environments, install it with `pipx install strop` instead. To work on Strop itself, see [Development](#development).
+The package is called `strop-cli` on PyPI because the name `strop` is reserved there. The command it installs is `strop`. To keep Strop out of your other Python environments, install it with `pipx install strop-cli` instead. To work on Strop itself, see [Development](#development).
 
 Strop calls models through [LiteLLM](https://docs.litellm.ai/docs/providers), so you can use any provider and model it supports. Set the API key your provider expects as an environment variable, or put it in a `.env` file in your project directory. Strop has no default model; you name every model yourself.
 
