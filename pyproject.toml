@@ -58,6 +58,9 @@ line-length = 100
 target-version = "py311"
 src = ["src", "tests"]
 
+[tool.ruff.format]
+line-ending = "lf"
+
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "N", "UP", "B", "C4", "SIM", "RUF", "PT", "ASYNC", "PL"]
 ignore = ["PLR2004"]
