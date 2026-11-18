@@ -26,6 +26,7 @@ class ExampleOutcome:
     cost_usd: float | None = None
     cached: bool = False
     detail: str | None = None
+    feedback: str | None = None
     scores: dict[str, float | None] = field(default_factory=dict)
 
     @property

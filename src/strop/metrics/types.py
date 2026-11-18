@@ -25,6 +25,7 @@ class ErrorCode(StrEnum):
     WRONG_VALUE = "wrong_value"
     MISSING_FIELD = "missing_field"
     RULE_VIOLATION = "rule_violation"
+    LOW_SCORE = "low_score"
     METRIC_ERROR = "metric_error"
 
 
@@ -77,17 +78,29 @@ class Metric(ABC):
     name: str
     direction: Direction = Direction.MAXIMIZE
     subjective: bool = False
+    needs_expected: bool = True
 
     @abstractmethod
     def compute(self, examples: Sequence[Example]) -> MetricValue:
         """Aggregate score over ``examples``."""
 
+    async def prepare(self, examples: Sequence[Example]) -> None:
+        """Do any batched or asynchronous work (model calls, subprocesses) before scoring."""
+        return None
+
     def per_example(self, example: Example) -> float | None:
         """A per-example score used for paired comparison; None if not applicable.
 
-        The default is correctness (1 or 0). Metrics that score on another scale override it.
+        The default is correctness (1 or 0), or None when there is no expected value.
+        Metrics that score on another scale override it.
         """
+        if example.expected is None:
+            return None
         return 1.0 if example.correct else 0.0
+
+    def feedback(self, example: Example) -> str | None:
+        """A short explanation of this example's score, shown to the optimizer."""
+        return None
 
     def _result(self, value: float | None, samples: int, **details: Any) -> MetricValue:
         return MetricValue(self.name, value, samples, self.subjective, dict(details))

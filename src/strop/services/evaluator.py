@@ -2,6 +2,7 @@
 
 import hashlib
 import json
+import logging
 import sqlite3
 from collections.abc import Sequence
 from dataclasses import dataclass, field
@@ -11,20 +12,24 @@ from strop.config.enums import ModelRole
 from strop.data.models import Partition, Row
 from strop.errors import DataError
 from strop.evaluation.budget import BudgetTracker
+from strop.evaluation.budgeted import BudgetedClient
 from strop.evaluation.examples import to_examples, with_scores
 from strop.evaluation.models import EvaluationRecord, NewEvaluation
 from strop.evaluation.parsing import load_output_schema
 from strop.evaluation.runner import Progress, PromptRunner
 from strop.llm.client import LLMClient
 from strop.llm.factory import build_client
+from strop.log import LOGGER_NAME
 from strop.metrics.suite import MetricSuite
 from strop.prompts.versions import PromptVersion
-from strop.services.metrics import build_suite
+from strop.services.metrics import build_suite, judge_model
 from strop.services.partitions import PartitionedData, load_partitions
 from strop.services.project import Project
 from strop.storage.cache import ResponseCache
 from strop.storage.datasets import DatasetRepository
 from strop.storage.evaluations import EvaluationRepository
+
+LOG = logging.getLogger(LOGGER_NAME)
 
 
 @dataclass(frozen=True)
@@ -107,6 +112,7 @@ class Evaluator:
         )
         outcomes = await runner.run(version.template, selected, progress)
         examples = to_examples(selected, outcomes)
+        await self.suite.prepare(examples)
         report = self.suite.evaluate(examples)
         return self.repository.save(
             NewEvaluation(
@@ -136,14 +142,25 @@ def build_evaluator(
 ) -> Evaluator:
     """Assemble an evaluator from the project configuration and an open database."""
     config = project.config
+    tracker = budget or BudgetTracker(config.budgets)
     cache = ResponseCache(conn) if use_cache else None
+    judge_spec = judge_model(project)
+    judge = None
+    if judge_spec is not None:
+        judge_client = BudgetedClient(build_client(config.execution, cache), tracker)
+        judge = (judge_client, judge_spec)
+        if judge_spec.model == config.models.target.model:
+            LOG.warning(
+                "the judge model is the same as the target model; its scores may favor its "
+                "own style. Use a different judge model if you can."
+            )
     return Evaluator(
         project=project,
         partitions=load_partitions(project, DatasetRepository(conn)),
-        suite=build_suite(project),
+        suite=build_suite(project, judge),
         client=build_client(config.execution, cache),
         repository=EvaluationRepository(conn),
-        budget=budget or BudgetTracker(config.budgets),
+        budget=tracker,
         schema=load_output_schema(project.root, config.output),
         allow_test=allow_test,
     )

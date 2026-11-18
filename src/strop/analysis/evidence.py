@@ -45,6 +45,8 @@ def evidence_payload(evidence: Sequence[FailedExample], max_chars: int) -> list[
             "model_output": clip(item.got, max_chars),
             "problem": item.code,
             **({"failed_checks": list(item.checks)} if item.checks else {}),
+            **({"feedback": clip(item.feedback, max_chars)} if item.feedback else {}),
+            **({"score": round(item.score, 3)} if item.score is not None else {}),
         }
         for item in evidence
     ]

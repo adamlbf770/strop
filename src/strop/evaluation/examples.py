@@ -29,11 +29,21 @@ def to_examples(rows: Sequence[Row], outcomes: Sequence[ExampleOutcome]) -> list
 def with_scores(
     outcomes: Sequence[ExampleOutcome], examples: Sequence[Example], suite: MetricSuite
 ) -> list[ExampleOutcome]:
-    """Attach each example's per-metric scores to its outcome."""
+    """Attach each example's per-metric scores and metric feedback to its outcome."""
     return [
         replace(
             outcome,
             scores={name: suite.metric(name).per_example(example) for name in suite.names},
+            feedback=_feedback(example, suite),
         )
         for outcome, example in zip(outcomes, examples, strict=True)
     ]
+
+
+def _feedback(example: Example, suite: MetricSuite) -> str | None:
+    notes = []
+    for name in suite.names:
+        text = suite.metric(name).feedback(example)
+        if text:
+            notes.append(f"{name}: {text}")
+    return "; ".join(notes) or None

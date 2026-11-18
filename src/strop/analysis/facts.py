@@ -20,6 +20,8 @@ class FailedExample:
     got: str
     code: str
     checks: tuple[str, ...] = ()
+    feedback: str | None = None
+    score: float | None = None
 
 
 @dataclass(frozen=True)
@@ -37,13 +39,16 @@ class AnalysisFacts:
 
 
 def build_facts(
-    outcomes: Sequence[ExampleOutcome], rows: Sequence[Row], output_type: OutputType
+    outcomes: Sequence[ExampleOutcome],
+    rows: Sequence[Row],
+    output_type: OutputType,
+    primary: str | None = None,
 ) -> AnalysisFacts:
     """Classify every outcome and collect the failures with their inputs."""
     inputs = {row.id: row.inputs for row in rows}
     failures: list[FailedExample] = []
     for outcome in outcomes:
-        code = classify_outcome(outcome, output_type)
+        code = classify_outcome(outcome, output_type, primary)
         if code is None:
             continue
         got = outcome.detail if outcome.error == "provider_error" else outcome.raw_output
@@ -55,6 +60,8 @@ def build_facts(
                 got or "",
                 code,
                 failed_rules(outcome),
+                outcome.feedback,
+                outcome.scores.get(primary) if primary else None,
             )
         )
     codes = Counter(f.code for f in failures)

@@ -9,6 +9,7 @@ class ValidOutputRate(Metric):
     """Share of outputs that were produced and parsed under the output contract."""
 
     name = "valid_output_rate"
+    needs_expected = False
 
     def compute(self, examples: Sequence[Example]) -> MetricValue:
         value = sum(e.valid for e in examples) / len(examples) if examples else None

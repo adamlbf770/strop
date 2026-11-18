@@ -77,7 +77,7 @@ async def analyze_version(
         record = await evaluator.evaluate(version, Partition.TRAIN, tag, rows=rows)
     outcomes = evaluator.repository.outcomes(record.id)
     config = evaluator.project.config
-    facts = build_facts(outcomes, rows, config.output.type)
+    facts = build_facts(outcomes, rows, config.output.type, evaluator.suite.primary)
     evidence = select_evidence(facts.failures, settings.evidence_examples, seed)
     patterns: list[Pattern] = []
     if analyzer is not None and evidence:

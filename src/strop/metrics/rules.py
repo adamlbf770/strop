@@ -36,6 +36,8 @@ class RuleMetric(Metric):
     empty one, is checked as written.
     """
 
+    needs_expected = False
+
     def __init__(self, rule_name: str, spec: RuleSpec) -> None:
         self.name = f"rule:{rule_name}"
         self._spec = spec

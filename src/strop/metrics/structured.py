@@ -32,6 +32,7 @@ class JsonValid(Metric):
     """Share of outputs that parse as JSON, before any schema check."""
 
     name = "json_valid"
+    needs_expected = False
 
     def compute(self, examples: Sequence[Example]) -> MetricValue:
         value = _mean([self.per_example(e) or 0.0 for e in examples])
@@ -45,6 +46,7 @@ class SchemaValid(Metric):
     """Share of outputs that parse as JSON and satisfy the configured schema."""
 
     name = "schema_valid"
+    needs_expected = False
 
     def compute(self, examples: Sequence[Example]) -> MetricValue:
         value = _mean([self.per_example(e) or 0.0 for e in examples])

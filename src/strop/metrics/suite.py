@@ -80,6 +80,7 @@ class MetricSuite:
             *config.secondary,
             *config.constraints,
             *(f"rule:{name}" for name in config.rules),
+            *extra,
             ALWAYS_REPORTED,
         ]
         metrics = {
@@ -97,6 +98,11 @@ class MetricSuite:
 
     def direction(self, name: str) -> Direction:
         return self._metrics[name].direction
+
+    async def prepare(self, examples: Sequence[Example]) -> None:
+        """Run every metric's batched or asynchronous setup before scoring."""
+        for metric in self._metrics.values():
+            await metric.prepare(examples)
 
     def evaluate(self, examples: Sequence[Example]) -> MetricReport:
         values = {name: metric.compute(examples) for name, metric in self._metrics.items()}

@@ -19,13 +19,13 @@ from strop.storage.database import transaction
 
 _OUTCOME_COLUMNS = (
     "row_id, expected, raw_output, value, parsed_json, error, detail, finish_reason, latency_s, "
-    "prompt_tokens, completion_tokens, total_tokens, cost_usd, cached, scores_json"
+    "prompt_tokens, completion_tokens, total_tokens, cost_usd, cached, scores_json, feedback"
 )
 
 
 _INSERT_OUTCOME = (
     f"INSERT INTO example_results (evaluation_id, {_OUTCOME_COLUMNS}) "
-    f"VALUES ({', '.join('?' * 16)})"
+    f"VALUES ({', '.join('?' * 17)})"
 )
 
 
@@ -119,6 +119,7 @@ class EvaluationRepository:
             o.cost_usd,
             int(o.cached),
             json.dumps(o.scores),
+            o.feedback,
         )
 
 
@@ -155,4 +156,5 @@ def _outcome(row: sqlite3.Row) -> ExampleOutcome:
         cost_usd=row["cost_usd"],
         cached=bool(row["cached"]),
         scores=json.loads(row["scores_json"]),
+        feedback=row["feedback"],
     )
